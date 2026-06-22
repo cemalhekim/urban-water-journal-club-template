@@ -1,0 +1,122 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeSmartWaterTU}[2026/06/22 TU Berlin Smart Water Networks Beamer theme]
+
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{iftex}
+
+\mode<presentation>
+
+\definecolor{SWNRed}{HTML}{FF0000}
+\definecolor{SWNBlue}{HTML}{2D8CFF}
+\definecolor{SWNBlack}{HTML}{000000}
+\definecolor{SWNWhite}{HTML}{FFFFFF}
+
+\ifPDFTeX
+  \RequirePackage[scaled=0.95]{helvet}
+  \renewcommand{\familydefault}{\sfdefault}
+\else
+  \RequirePackage{fontspec}
+  \IfFontExistsTF{Helvetica}{\setsansfont{Helvetica}}{\setsansfont{Arial}}
+  \renewcommand{\familydefault}{\sfdefault}
+\fi
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{sidebar left}{}
+\setbeamertemplate{sidebar right}{}
+\setbeamercolor{normal text}{fg=SWNBlack,bg=SWNWhite}
+\setbeamercolor{structure}{fg=SWNRed}
+\setbeamercolor{frametitle}{fg=SWNRed,bg=SWNWhite}
+\setbeamercolor{title}{fg=SWNRed,bg=SWNWhite}
+\setbeamerfont{normal text}{size=\fontsize{15}{18}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{28}{32}\selectfont,series=\mdseries}
+\setbeamerfont{title}{size=\fontsize{28}{32}\selectfont,series=\mdseries}
+\setbeamerfont{author}{size=\fontsize{15}{18}\selectfont,series=\bfseries}
+\setbeamerfont{institute}{size=\fontsize{15}{18}\selectfont}
+\setbeamerfont{footline}{size=\fontsize{9}{11}\selectfont}
+\setbeamersize{text margin left=0.523in,text margin right=0.223in}
+
+\newcommand{\SWNAssetPath}{assets}
+\newcommand{\setswnassetpath}[1]{\renewcommand{\SWNAssetPath}{#1}}
+\newif\ifSWN@shownumber
+\SWN@shownumbertrue
+
+\newcommand{\SWN@placeimage}[5]{%
+  \node[anchor=north west,inner sep=0pt] at ([xshift=#1,yshift=-#2]current page.north west)
+    {\includegraphics[width=#3,height=#4]{#5}};%
+}
+
+\newcommand{\SWNHangingPara}[1]{%
+  \noindent\hangindent=0.3125in\hangafter=1 #1\par
+}
+
+\newcommand{\SWNBullet}[1]{%
+  \noindent\makebox[0.3125in][l]{-}#1\par\vspace{0.214in}
+}
+
+\newcommand{\SWNBodyBox}[2]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north west,inner sep=0pt,text=SWNBlack,align=left,text width=9.054in]
+      at ([xshift=0.623in,yshift=-1.581in]current page.north west)
+      {\begin{minipage}[t][#1][t]{9.054in}\fontsize{15}{18}\selectfont #2\end{minipage}};
+  \end{tikzpicture}%
+}
+
+\newcommand{\SWNFooter}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \SWN@placeimage{0.188in}{5.117in}{0.375in}{0.436in}{\SWNAssetPath/smart-water-networks.png}
+    \SWN@placeimage{0.879in}{5.113in}{0.417in}{0.417in}{\SWNAssetPath/einstein-center.png}
+    \SWN@placeimage{1.503in}{5.113in}{0.749in}{0.417in}{\SWNAssetPath/tu-berlin-logo.png}
+    \ifSWN@shownumber
+      \node[anchor=north east,inner sep=0pt,text=SWNBlack,font=\usebeamerfont{footline}]
+        at ([xshift=9.50in,yshift=-5.214in]current page.north west) {\insertframenumber};
+    \fi
+  \end{tikzpicture}%
+}
+
+\setbeamertemplate{background canvas}{\color{SWNWhite}\rule{\paperwidth}{\paperheight}\SWNFooter}
+
+\setbeamertemplate{frametitle}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{frametitle},align=right,text width=9.324in]
+      at ([xshift=9.747in,yshift=-0.254in]current page.north west) {\insertframetitle};
+  \end{tikzpicture}%
+  \vspace*{1.257in}%
+}
+
+\newenvironment{SWNFrame}[1]{%
+  \begin{frame}[t]{#1}
+  \fontsize{15}{18}\selectfont
+}{%
+  \end{frame}
+}
+
+\newcommand{\SWNTextFrame}[3]{%
+  \begin{frame}[t]{#1}
+    \SWNBodyBox{#2}{#3}
+  \end{frame}
+}
+
+\newcommand{\SWNEmptyFrame}[1]{%
+  \begin{frame}[t]{#1}
+  \end{frame}
+}
+
+\newcommand{\SWNTitleSlide}[4]{%
+  \SWN@shownumberfalse
+  \begin{frame}[plain,t]
+    \begin{tikzpicture}[remember picture,overlay]
+      \SWN@placeimage{0.670in}{0.630in}{2.423in}{2.815in}{\SWNAssetPath/smart-water-networks.png}
+      \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{title},align=right,text width=6.217in]
+        at ([xshift=9.824in,yshift=-1.744in]current page.north west) {#1};
+      \node[anchor=north east,inner sep=0pt,text=SWNBlack,align=right,text width=8.803in]
+        at ([xshift=9.747in,yshift=-3.492in]current page.north west)
+        {{\usebeamerfont{author}#2}\\[0.06in]{\fontsize{15}{18}\selectfont\textbf{#3}#4}};
+    \end{tikzpicture}
+  \end{frame}
+  \SWN@shownumbertrue
+}
+
+\mode<all>
