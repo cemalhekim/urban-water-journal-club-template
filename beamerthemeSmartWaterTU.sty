@@ -36,7 +36,7 @@
 \setbeamerfont{author}{size=\fontsize{15}{18}\selectfont,series=\bfseries}
 \setbeamerfont{institute}{size=\fontsize{15}{18}\selectfont}
 \setbeamerfont{footline}{size=\fontsize{9}{11}\selectfont}
-\setbeamersize{text margin left=0.523in,text margin right=0.223in}
+\setbeamersize{text margin left=0.56in,text margin right=0.56in}
 
 \newcommand{\SWNAssetPath}{assets}
 \newcommand{\setswnassetpath}[1]{\renewcommand{\SWNAssetPath}{#1}}
@@ -71,7 +71,7 @@
     \SWN@placeimage{1.503in}{5.113in}{0.749in}{0.417in}{\SWNAssetPath/tu-berlin-logo.png}
     \ifSWN@shownumber
       \node[anchor=north east,inner sep=0pt,text=SWNBlack,font=\usebeamerfont{footline}]
-        at ([xshift=9.50in,yshift=-5.214in]current page.north west) {\insertframenumber};
+        at ([xshift=9.40in,yshift=-5.214in]current page.north west) {\insertframenumber};
     \fi
   \end{tikzpicture}%
 }
@@ -80,8 +80,8 @@
 
 \setbeamertemplate{frametitle}{%
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{frametitle},align=right,text width=9.324in]
-      at ([xshift=9.747in,yshift=-0.254in]current page.north west) {\insertframetitle};
+    \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{frametitle},align=right,text width=8.88in]
+      at ([xshift=9.44in,yshift=-0.254in]current page.north west) {\insertframetitle};
   \end{tikzpicture}%
   \vspace*{1.257in}%
 }

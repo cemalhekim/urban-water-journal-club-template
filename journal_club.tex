@@ -11,7 +11,8 @@
 \institute{Rajabi, Komeilian, Wan, and Farmani - Water Research 238 (2023) 120012}
 
 \newcommand{\PaperAsset}[2][]{\includegraphics[#1]{paper-assets/#2}}
-\newcommand{\JCSource}{\scriptsize Source: Rajabi et al., Water Research 238 (2023) 120012.}
+\newcommand{\JCSource}{\vspace{0.035in}{\tiny\raggedleft Source: Rajabi et al., Water Research 238 (2023) 120012.\par}}
+\newcommand{\JCSourceTight}{\JCSource}
 
 \newcommand{\JCBullets}[1]{%
   \begin{itemize}
@@ -26,6 +27,15 @@
     \setlength{\itemsep}{0.035in}
     \setlength{\parskip}{0pt}
     \small
+    #1
+  \end{itemize}
+}
+
+\newcommand{\CompactBullets}[1]{%
+  \begin{itemize}
+    \setlength{\itemsep}{0.02in}
+    \setlength{\parskip}{0pt}
+    \footnotesize
     #1
   \end{itemize}
 }
@@ -335,23 +345,24 @@ q_L=C_L A_L \sqrt{2gh_L}
 
 \begin{SWNFrame}{WHAT A LEAK LOOKS LIKE TO SSIM}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.55\textwidth}
-\PaperAsset[width=0.60\linewidth]{fig10-ssimo.png}
-\hfill
-\PaperAsset[width=0.34\linewidth]{fig11-local-ssim.png}
+\begin{column}{0.53\textwidth}
+\centering
+\PaperAsset[height=2.18in,keepaspectratio]{fig10-ssimo.png}
+\vspace{0.035in}
 
-\JCSource
+\PaperAsset[height=0.70in,keepaspectratio]{fig11-local-ssim.png}
+\JCSourceTight
 \end{column}
-\begin{column}{0.41\textwidth}
-\small
+\begin{column}{0.43\textwidth}
+\footnotesize
 \textbf{Detection behavior at P-40}
-\DenseBullets{
+\CompactBullets{
   \item Large leak, $A_L=0.05$ m$^2$: $SSIM_o$ drops below threshold immediately and returns to normal after the leak ends.
   \item Medium leak, $A_L=0.005$ m$^2$: delayed detection; reported DT about 16 hours after the leak starts.
   \item Small leak, $A_L=0.0005$ m$^2$: detected only near the maximum leak rate; DT about 21 hours.
 }
 \textbf{Localization behavior}
-\DenseBullets{
+\CompactBullets{
   \item $SSIM_l$ forms a low-similarity zone around the leak.
   \item The estimated location converges toward the true leak as leak magnitude grows.
 }
@@ -362,14 +373,14 @@ q_L=C_L A_L \sqrt{2gh_L}
 \begin{SWNFrame}{HYPOTHETICAL RESULTS: METRICS}
 \small
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.52\textwidth}
-\PaperAsset[width=0.52\linewidth]{fig12-gdrl.png}
+\begin{column}{0.50\textwidth}
+\PaperAsset[width=0.50\linewidth]{fig12-gdrl.png}
 \hfill
-\PaperAsset[width=0.44\linewidth]{fig13-tpr-tnr.png}
+\PaperAsset[width=0.42\linewidth]{fig13-tpr-tnr.png}
 
-\JCSource
+\JCSourceTight
 \end{column}
-\begin{column}{0.44\textwidth}
+\begin{column}{0.46\textwidth}
 \textbf{Detection metrics}
 \[
 TPR=\frac{TP}{TP+FN},\quad
@@ -389,14 +400,14 @@ ACC=\frac{TP+TN}{TP+TN+FP+FN}
 
 \begin{SWNFrame}{LOCALIZATION RESULTS}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.56\textwidth}
-\PaperAsset[width=0.48\linewidth]{fig14-location-tpr.png}
+\begin{column}{0.54\textwidth}
+\PaperAsset[width=0.46\linewidth]{fig14-location-tpr.png}
 \hfill
-\PaperAsset[width=0.48\linewidth]{fig15-gdrl-dt.png}
+\PaperAsset[width=0.46\linewidth]{fig15-gdrl-dt.png}
 
-\JCSource
+\JCSourceTight
 \end{column}
-\begin{column}{0.40\textwidth}
+\begin{column}{0.42\textwidth}
 \small
 \textbf{Location and pressure range}
 \DenseBullets{
@@ -418,7 +429,7 @@ ACC=\frac{TP+TN}{TP+TN+FP+FN}
 \small
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.56\textwidth}
-\PaperAsset[width=0.95\linewidth]{fig16-realtime.png}
+\PaperAsset[height=2.95in,keepaspectratio]{fig16-realtime.png}
 
 \JCSource
 \end{column}
