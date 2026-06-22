@@ -11,7 +11,7 @@
 \institute{Rajabi, Komeilian, Wan, and Farmani - Water Research 238 (2023) 120012}
 
 \newcommand{\PaperAsset}[2][]{\includegraphics[#1]{paper-assets/#2}}
-\newcommand{\JCSource}{\vspace{0.035in}{\tiny\raggedleft Source: Rajabi et al., Water Research 238 (2023) 120012.\par}}
+\newcommand{\JCSource}{\vspace{0.025in}{\tiny\raggedleft Source: Rajabi et al., Water Research 238 (2023) 120012.\par}}
 \newcommand{\JCSourceTight}{\JCSource}
 
 \newcommand{\JCBullets}[1]{%
@@ -231,12 +231,12 @@ SSIM(x,y)=l(x,y)c(x,y)s(x,y)
 
 \begin{SWNFrame}{CASE STUDY: L-TOWN BENCHMARK}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.39\textwidth}
+\begin{column}{0.41\textwidth}
 \PaperAsset[width=\linewidth]{fig3-map.png}
 
 \JCSource
 \end{column}
-\begin{column}{0.57\textwidth}
+\begin{column}{0.55\textwidth}
 \small
 \textbf{Network and monitoring}
 \DenseBullets{
@@ -284,10 +284,10 @@ SSIM(x,y)=l(x,y)c(x,y)s(x,y)
 \small
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.55\textwidth}
-\PaperAsset[width=0.78\linewidth]{fig5-mape.png}
+\PaperAsset[width=0.88\linewidth]{fig5-mape.png}
 \vspace{0.05in}
 
-\PaperAsset[width=0.78\linewidth]{fig5-thresholds.png}
+\PaperAsset[width=0.88\linewidth]{fig5-thresholds.png}
 
 \JCSource
 \end{column}
@@ -318,7 +318,7 @@ SSIM(x,y)=l(x,y)c(x,y)s(x,y)
 \small
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.54\textwidth}
-\PaperAsset[width=0.94\linewidth]{fig8-leak-step.png}
+\PaperAsset[width=\linewidth]{fig8-leak-step.png}
 
 \JCSource
 \end{column}
@@ -345,15 +345,15 @@ q_L=C_L A_L \sqrt{2gh_L}
 
 \begin{SWNFrame}{WHAT A LEAK LOOKS LIKE TO SSIM}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.53\textwidth}
+\begin{column}{0.56\textwidth}
 \centering
-\PaperAsset[height=2.18in,keepaspectratio]{fig10-ssimo.png}
+\PaperAsset[height=2.50in,keepaspectratio]{fig10-ssimo.png}
 \vspace{0.035in}
 
-\PaperAsset[height=0.70in,keepaspectratio]{fig11-local-ssim.png}
+\PaperAsset[height=0.82in,keepaspectratio]{fig11-local-ssim.png}
 \JCSourceTight
 \end{column}
-\begin{column}{0.43\textwidth}
+\begin{column}{0.40\textwidth}
 \footnotesize
 \textbf{Detection behavior at P-40}
 \CompactBullets{
@@ -373,14 +373,14 @@ q_L=C_L A_L \sqrt{2gh_L}
 \begin{SWNFrame}{HYPOTHETICAL RESULTS: METRICS}
 \small
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.50\textwidth}
-\PaperAsset[width=0.50\linewidth]{fig12-gdrl.png}
+\begin{column}{0.52\textwidth}
+\PaperAsset[width=0.52\linewidth]{fig12-gdrl.png}
 \hfill
-\PaperAsset[width=0.42\linewidth]{fig13-tpr-tnr.png}
+\PaperAsset[width=0.46\linewidth]{fig13-tpr-tnr.png}
 
 \JCSourceTight
 \end{column}
-\begin{column}{0.46\textwidth}
+\begin{column}{0.44\textwidth}
 \textbf{Detection metrics}
 \[
 TPR=\frac{TP}{TP+FN},\quad
@@ -400,14 +400,14 @@ ACC=\frac{TP+TN}{TP+TN+FP+FN}
 
 \begin{SWNFrame}{LOCALIZATION RESULTS}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.54\textwidth}
-\PaperAsset[width=0.46\linewidth]{fig14-location-tpr.png}
+\begin{column}{0.56\textwidth}
+\PaperAsset[width=0.49\linewidth]{fig14-location-tpr.png}
 \hfill
-\PaperAsset[width=0.46\linewidth]{fig15-gdrl-dt.png}
+\PaperAsset[width=0.49\linewidth]{fig15-gdrl-dt.png}
 
 \JCSourceTight
 \end{column}
-\begin{column}{0.42\textwidth}
+\begin{column}{0.40\textwidth}
 \small
 \textbf{Location and pressure range}
 \DenseBullets{
@@ -428,12 +428,12 @@ ACC=\frac{TP+TN}{TP+TN+FP+FN}
 \begin{SWNFrame}{REAL-TIME ONE-YEAR LEAK TEST}
 \small
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.56\textwidth}
-\PaperAsset[height=2.95in,keepaspectratio]{fig16-realtime.png}
+\begin{column}{0.60\textwidth}
+\PaperAsset[height=3.25in,keepaspectratio]{fig16-realtime.png}
 
 \JCSource
 \end{column}
-\begin{column}{0.40\textwidth}
+\begin{column}{0.36\textwidth}
 \textbf{Setup}
 \DenseBullets{
   \item Six BattLeDIM leaks in 2018.
