@@ -7,7 +7,7 @@ This folder contains a LaTeX/Beamer recreation of
 
 - `main.tex`: example deck mirroring the six slides in the PowerPoint template.
 - `journal_club.tex`: detailed 19-slide journal-club presentation for
-  Rajabi et al. (2023), designed for a 12-minute talk.
+  Rajabi et al. (2023).
 - `beamerthemeSmartWaterTU.sty`: reusable Beamer theme with the PowerPoint
   slide size, typography, title placement, footer logos, and slide numbering.
 - `assets/`: extracted and converted graphics from the PowerPoint template.
