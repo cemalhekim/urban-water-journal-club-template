@@ -39,21 +39,24 @@ Opening: “This paper asks whether normal hydraulic behavior can be learned as
 an image translation problem and whether deviations from that learned behavior
 can reveal leaks.”
 
-### 2. Operational problem - 1:00 - Cemal
+### 2. Research challenges - 1:00 - Cemal
 
-Emphasize the conflict: pressure sensors are practical, but leak signals are
-weak and confounded by demand and measurement uncertainty. End with the
-knowledge gap, not a list of prior methods.
+State the two challenges as questions: can weak leak signals be separated from
+noise, and can detection plus localization work without labeled leaks?
+Emphasize that these are the problems to solve, not a description of the
+authors' method.
 
 Transition: “The paper therefore needs a method that learns normal behavior
 without requiring a library of labeled leaks.”
 
-### 3. Research question and claim - 1:15 - Cemal
+### 3. Paper goal and research question - 1:15 - Cemal
 
-Read the research question once. Clearly label the right column as the
-**authors’ claim**, not the presenters’ conclusion.
+Read the research question once. Then state the paper's goal in plain language:
+develop accurate, robust, near-real-time leak detection and localization from
+pressure data despite uncertainty and scarce labels. Explicitly say that using
+a GAN is the proposed method, not the research goal.
 
-Transition: “The proposed answer is a four-stage pipeline.”
+Transition: “To pursue that goal, the authors propose a four-stage pipeline.”
 
 ### 4. Core pipeline - 1:15 - Cemal
 

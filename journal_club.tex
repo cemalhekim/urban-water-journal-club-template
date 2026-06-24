@@ -56,59 +56,59 @@
   { -- critical paper presentation}
 
 % 1:00 -- Cemal
-\begin{SWNFrame}{THE OPERATIONAL PROBLEM}
+\begin{SWNFrame}{RESEARCH CHALLENGES}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.51\textwidth}
-\textbf{Why leak detection is difficult}
+\textbf{Challenge 1: Can weak leak signals be separated from noise?}
 \JCBullets{
   \item Pressure sensors are affordable and real-time, but distant or small leaks may produce weak signals.
   \item Demand uncertainty, sensor error, and operational changes can resemble a leak.
-  \item Labeled field leaks are scarce; exhaustive leak simulation is expensive.
 }
 \end{column}
 \begin{column}{0.45\textwidth}
-\textbf{Knowledge gap}
+\textbf{Challenge 2: Can detection and localization work without labeled leaks?}
 \JCBullets{
-  \item Existing data-driven methods struggle with labels and localization.
+  \item Labeled field leaks are scarce; exhaustive leak simulation is expensive.
+  \item Existing data-driven methods struggle with scarce labels and spatial localization.
   \item Model-based methods require calibration and repeated hydraulic simulation.
-  \item A useful method must be fast, uncertainty-aware, spatial, and trainable without labeled leaks.
 }
 \end{column}
 \end{columns}
 \vspace{0.04in}
-\textbf{Why it matters:} localization should narrow the field search area before costly inspection.
+\textbf{Research need:} a fast, uncertainty-aware, spatial method that learns without labeled leaks and narrows the field inspection area.
 \LitSource{Context synthesized from Rajabi et al. (2023), pp. 1--3; Wan et al. (2022).}
 \end{SWNFrame}
 
 % 1:15 -- Cemal
-\begin{SWNFrame}{RESEARCH QUESTION AND CLAIM}
+\begin{SWNFrame}{PAPER GOAL AND RESEARCH QUESTION}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.57\textwidth}
-\textbf{Research question}
+\textbf{Research question derived from the paper's objective}
 \vspace{0.06in}
 
 \emph{Can a conditional deep convolutional GAN, trained only on leak-free
 demand--pressure behavior, detect and spatially localize unseen leaks from
 pressure observations in near real time?}
 
-\vspace{0.16in}
-\textbf{Testable expectations}
+\vspace{0.12in}
+\textbf{Success would require}
 \DenseBullets{
-  \item Predicted normal pressure images should match leak-free observations.
-  \item A leak should lower global image similarity.
-  \item The lowest local similarity should occur near the leak.
+  \item accurate detection despite demand and measurement uncertainty;
+  \item useful spatial localization from pressure observations;
+  \item low-cost inference suitable for real-time operation.
 }
 \end{column}
 \begin{column}{0.39\textwidth}
-\textbf{Authors' main claim}
+\textbf{Goal set by the authors}
 \JCBullets{
-  \item The CDCGAN + SSIM pipeline is accurate enough for real-time leak detection and localization.
-  \item Image representation allows sparse, variable-size monitoring data to scale.
-  \item GAN inference is cheaper than repeated hydraulic simulation.
+  \item Develop a robust methodology for accurate, real-time leak detection and localization in complex settings.
+  \item Address uncertainty, scale, scarce labels, and complex features while using pressure data.
 }
+\vspace{0.08in}
+\textbf{Not the goal:} ``use a GAN.'' The GAN is the authors' proposed means of achieving the goal.
 \end{column}
 \end{columns}
-\PaperSource{pp. 1 and 3}
+\PaperSource{pp. 2--3}
 \end{SWNFrame}
 
 % 1:15 -- Cemal
