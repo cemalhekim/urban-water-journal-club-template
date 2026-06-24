@@ -14,11 +14,13 @@
 \definecolor{SWNWhite}{HTML}{FFFFFF}
 
 \ifPDFTeX
-  \RequirePackage[scaled=0.95]{helvet}
+  \RequirePackage[scaled=1.0]{helvet}
   \renewcommand{\familydefault}{\sfdefault}
 \else
   \RequirePackage{fontspec}
-  \IfFontExistsTF{Helvetica}{\setsansfont{Helvetica}}{\setsansfont{Arial}}
+  \IfFontExistsTF{Helvetica}
+    {\setsansfont{Helvetica}}
+    {\IfFontExistsTF{Arial}{\setsansfont{Arial}}{\setsansfont{TeX Gyre Heros}}}
   \renewcommand{\familydefault}{\sfdefault}
 \fi
 
@@ -36,7 +38,14 @@
 \setbeamerfont{author}{size=\fontsize{15}{18}\selectfont,series=\bfseries}
 \setbeamerfont{institute}{size=\fontsize{15}{18}\selectfont}
 \setbeamerfont{footline}{size=\fontsize{9}{11}\selectfont}
+\setbeamerfont{itemize/enumerate body}{size=\fontsize{15}{18}\selectfont}
+\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{15}{18}\selectfont}
 \setbeamersize{text margin left=0.48in,text margin right=0.48in}
+\setbeamertemplate{itemize item}{-}
+\setbeamertemplate{itemize subitem}{-}
+\setbeamertemplate{itemize subsubitem}{-}
+\setlength{\leftmargini}{0.3125in}
+\setlength{\leftmarginii}{0.3125in}
 
 \newcommand{\SWNAssetPath}{assets}
 \newcommand{\setswnassetpath}[1]{\renewcommand{\SWNAssetPath}{#1}}
@@ -53,7 +62,7 @@
 }
 
 \newcommand{\SWNBullet}[1]{%
-  \noindent\makebox[0.3125in][l]{-}#1\par\vspace{0.214in}
+  \noindent\hangindent=0.3125in\hangafter=1\makebox[0.3125in][l]{-}#1\par\vspace{0.214in}
 }
 
 \newcommand{\SWNBodyBox}[2]{%

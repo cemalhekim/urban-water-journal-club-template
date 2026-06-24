@@ -6,13 +6,16 @@
 \usepackage{booktabs}
 \usepackage{array}
 
-\title{Leak Detection and Localization in WDNs Using CDCGANs}
+\title{Can a GAN Detect and Localize Leaks from Pressure Images?}
 \author{Cemal Hekim, Jan Lcukey, and Moyang Chen}
 \institute{Rajabi, Komeilian, Wan, and Farmani - Water Research 238 (2023) 120012}
 
 \newcommand{\PaperAsset}[2][]{\includegraphics[#1]{paper-assets/#2}}
-\newcommand{\JCSource}{\vspace{0.025in}{\tiny\raggedleft Source: Rajabi et al., Water Research 238 (2023) 120012.\par}}
-\newcommand{\JCSourceTight}{\JCSource}
+\newcommand{\PaperSource}[1]{%
+  \vspace{0.035in}{\fontsize{8}{9}\selectfont\color{black!65}\raggedleft
+  Source: Rajabi et al. (2023), Water Research 238, 120012, #1.\par}}
+\newcommand{\LitSource}[1]{%
+  \vspace{0.025in}{\fontsize{8}{9}\selectfont\color{black!65}\raggedleft #1\par}}
 
 \newcommand{\JCBullets}[1]{%
   \begin{itemize}
@@ -24,511 +27,450 @@
 
 \newcommand{\DenseBullets}[1]{%
   \begin{itemize}
-    \setlength{\itemsep}{0.035in}
+    \setlength{\itemsep}{0.025in}
     \setlength{\parskip}{0pt}
-    \small
     #1
   \end{itemize}
 }
 
 \newcommand{\CompactBullets}[1]{%
   \begin{itemize}
-    \setlength{\itemsep}{0.02in}
+    \setlength{\itemsep}{0.012in}
     \setlength{\parskip}{0pt}
-    \footnotesize
     #1
   \end{itemize}
 }
 
 \begin{document}
 
+% MAIN TALK: 11:30 target, leaving ~30 s safety margin.
+% Presenter balance:
+% Cemal: slides 1--4 (3:50)
+% Jan: slides 5--8 (3:50)
+% Moyang: slides 9--13 (3:50)
+
 \SWNTitleSlide
-  {Leak Detection and Localization in WDNs Using CDCGANs}
+  {Can a GAN Detect and Localize Leaks from Pressure Images?}
   {Cemal Hekim, Jan Lcukey, and Moyang Chen}
-  {Rajabi et al., Water Research 238 (2023)}
-  { -- paper presentation}
+  {Rajabi et al., Water Research 238 (2023), 120012}
+  { -- critical paper presentation}
 
-\begin{SWNFrame}{PAPER AT A GLANCE}
-\small
+% 1:00 -- Cemal
+\begin{SWNFrame}{THE OPERATIONAL PROBLEM}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.57\textwidth}
+\begin{column}{0.51\textwidth}
+\textbf{Why leak detection is difficult}
 \JCBullets{
-  \item \textbf{Problem:} detect and localize pipe leaks in water distribution networks using pressure observations.
-  \item \textbf{Core idea:} train a conditional deep convolutional GAN to predict the \emph{leak-free} pressure image from a demand image.
-  \item \textbf{Anomaly signal:} compare predicted leak-free pressure image with observed pressure image using structural similarity index (SSIM).
-  \item \textbf{Validation:} L-Town benchmark, 24 hypothetical single-leak scenarios, plus six one-year real-time leaks from BattLeDIM.
+  \item Pressure sensors are affordable and real-time, but distant or small leaks may produce weak signals.
+  \item Demand uncertainty, sensor error, and operational changes can resemble a leak.
+  \item Labeled field leaks are scarce; exhaustive leak simulation is expensive.
 }
 \end{column}
-\begin{column}{0.38\textwidth}
-\begin{tabular}{@{}>{\bfseries}p{1.3in}p{1.85in}@{}}
-Model & pix2pix-style CDCGAN\\
-Input & Demand image\\
-Output & Leak-free pressure image\\
-Sensors & 780 OPs and 33 OPs\\
-Training pairs & 105,120\\
-Time step & 5 minutes\\
-Real-time ACC & about 70\%\\
-\end{tabular}
-\vspace{0.12in}
-
-\JCSource
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{WHY THIS PROBLEM MATTERS}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.5\textwidth}
-\textbf{Operational context}
-\DenseBullets{
-  \item SCADA systems increasingly provide pressure and flow measurements in real time.
-  \item Leaks create abnormal hydraulic behavior, but pressure anomalies can be small, delayed, or masked by demand uncertainty.
-  \item Detection asks: \emph{is there a leak?} Localization asks: \emph{where is the likely leak area?}
-  \item Localization is not final pinpointing; it narrows the search before field inspection.
-}
-\end{column}
-\begin{column}{0.46\textwidth}
-\textbf{Why pressure-only LD\&L is hard}
-\DenseBullets{
-  \item Flow data enables mass-balance logic, but pressure meters are cheaper and easier to install.
-  \item Pressure is less sensitive to distant leaks.
-  \item Demand variation and measurement error can resemble leak effects.
-  \item Labeled historical leak data are scarce, unreliable, or expensive to obtain.
+\begin{column}{0.45\textwidth}
+\textbf{Knowledge gap}
+\JCBullets{
+  \item Existing data-driven methods struggle with labels and localization.
+  \item Model-based methods require calibration and repeated hydraulic simulation.
+  \item A useful method must be fast, uncertainty-aware, spatial, and trainable without labeled leaks.
 }
 \end{column}
 \end{columns}
-\vspace{0.1in}
-\textbf{Journal-club framing:} the paper is not just applying a neural net; it reformulates hydraulic anomaly detection as image-to-image translation plus image similarity.
+\vspace{0.04in}
+\textbf{Why it matters:} localization should narrow the field search area before costly inspection.
+\LitSource{Context synthesized from Rajabi et al. (2023), pp. 1--3; Wan et al. (2022).}
 \end{SWNFrame}
 
-\begin{SWNFrame}{WHERE THE PAPER SITS IN THE LITERATURE}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.48\textwidth}
-\textbf{Data-driven methods}
-\DenseBullets{
-  \item Use historical monitoring data directly.
-  \item Include statistical control limits, residual models, classifiers, and clustering.
-  \item Advantage: less dependence on detailed hydraulic physics.
-  \item Weakness: supervised variants need labeled leak data; localization performance is debated.
-}
-\end{column}
-\begin{column}{0.48\textwidth}
-\textbf{Model-based methods}
-\DenseBullets{
-  \item Compare measurements against a calibrated hydraulic model.
-  \item Include inverse modeling, sensitivity matrices, and model-generated classifiers.
-  \item Advantage: physically interpretable and useful when real leaks are rare.
-  \item Weakness: calibration and repeated hydraulic simulations can be expensive.
-}
-\end{column}
-\end{columns}
-\vspace{0.08in}
-\textbf{Claimed contribution:} combine hydraulic simulation for normal-data generation with a fast CDCGAN metamodel and SSIM-based anomaly scoring.
-\end{SWNFrame}
-
-\begin{SWNFrame}{PROPOSED PIPELINE}
+% 1:15 -- Cemal
+\begin{SWNFrame}{RESEARCH QUESTION AND CLAIM}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.57\textwidth}
-\PaperAsset[width=\linewidth]{fig1-flowchart.png}
+\textbf{Research question}
+\vspace{0.06in}
 
-\JCSource
+\emph{Can a conditional deep convolutional GAN, trained only on leak-free
+demand--pressure behavior, detect and spatially localize unseen leaks from
+pressure observations in near real time?}
+
+\vspace{0.16in}
+\textbf{Testable expectations}
+\DenseBullets{
+  \item Predicted normal pressure images should match leak-free observations.
+  \item A leak should lower global image similarity.
+  \item The lowest local similarity should occur near the leak.
+}
 \end{column}
 \begin{column}{0.39\textwidth}
-\small
-\textbf{Four pillars}
-\DenseBullets{
-  \item Generate leak-free demand-pressure pairs with EPANET while sampling demand uncertainty.
-  \item Interpolate point observations to 256 x 256 grayscale spatial images using kriging.
-  \item Train a CDCGAN to map demand images to pressure images under no-leak conditions.
-  \item Detect and localize leaks by comparing predicted and observed pressure images with SSIM.
+\textbf{Authors' main claim}
+\JCBullets{
+  \item The CDCGAN + SSIM pipeline is accurate enough for real-time leak detection and localization.
+  \item Image representation allows sparse, variable-size monitoring data to scale.
+  \item GAN inference is cheaper than repeated hydraulic simulation.
 }
-\textbf{Key concept:} the model learns normal hydraulic structure, then treats deviations from that learned structure as anomalies.
+\end{column}
+\end{columns}
+\PaperSource{pp. 1 and 3}
+\end{SWNFrame}
+
+% 1:15 -- Cemal
+\begin{SWNFrame}{THE CORE IDEA IN ONE PIPELINE}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.58\textwidth}
+\PaperAsset[width=\linewidth]{fig1-flowchart.png}
+\PaperSource{Fig. 1, p. 3}
+\end{column}
+\begin{column}{0.38\textwidth}
+\textbf{Four steps}
+\JCBullets{
+  \item Simulate leak-free demand and pressure with EPANET.
+  \item Convert point values into 256 x 256 spatial images using kriging.
+  \item Learn the normal mapping: demand image $\rightarrow$ pressure image.
+  \item Compare predicted and observed pressure images using SSIM.
+}
+\vspace{0.04in}
+\textbf{Novel combination:} hydraulic simulation supplies normal data; the neural network becomes a fast surrogate; SSIM supplies the anomaly signal.
 \end{column}
 \end{columns}
 \end{SWNFrame}
 
-\begin{SWNFrame}{THEORY: SEMI-SUPERVISED ANOMALY DETECTION}
-\small
+% 0:55 -- Jan
+\begin{SWNFrame}{HOW THE METHOD MAKES A DECISION}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.49\textwidth}
-\textbf{Why semi-supervised?}
-\DenseBullets{
-  \item Real labeled leak examples are limited.
-  \item Fire-hydrant experiments are costly.
-  \item Exhaustive synthetic leak simulation over all locations and magnitudes can be computationally infeasible.
-  \item Normal, leak-free data are easier to produce or collect.
-}
-\end{column}
-\begin{column}{0.47\textwidth}
-\textbf{How the anomaly boundary is built}
-\DenseBullets{
-  \item Train on normal demand-pressure behavior.
-  \item Given a new demand image, generate the expected normal pressure image.
-  \item Compare expected normal pressure with observed pressure.
-  \item Low similarity means the observation is outside the learned normal region.
-}
-\end{column}
-\end{columns}
-\vspace{0.07in}
-\textbf{Important assumption:} points close in learned feature/image space are more likely to share the same normal/leak label.
-\end{SWNFrame}
-
-\begin{SWNFrame}{MODEL: PIX2PIX-STYLE CDCGAN}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.54\textwidth}
+\begin{column}{0.53\textwidth}
 \PaperAsset[width=\linewidth]{fig2-architecture.png}
-
-\JCSource
+\PaperSource{Fig. 2, p. 5}
 \end{column}
-\begin{column}{0.42\textwidth}
-\small
-\textbf{Generator}
+\begin{column}{0.43\textwidth}
+\textbf{Prediction model}
 \DenseBullets{
-  \item Modified U-Net encoder-decoder CNN.
-  \item Encoder learns increasingly abstract low-resolution features.
-  \item Decoder upsamples back to the pressure-image resolution.
-  \item Skip connections preserve spatial information.
+  \item Pix2pix-style conditional GAN.
+  \item Modified U-Net generator with skip connections.
+  \item PatchGAN discriminator; adversarial + L1 loss.
 }
-\textbf{Discriminator}
+\textbf{Detection and localization}
 \DenseBullets{
-  \item PatchGAN classifier over overlapping 70 x 70 patches.
-  \item Objective combines adversarial loss with L1 image reconstruction loss.
+  \item Global $SSIM_o$: alarm when below an hourly mean $-3\sigma$ threshold for five consecutive steps.
+  \item Local $SSIM_l$: minimum-similarity region estimates the leak location.
 }
+\textbf{Built-in tradeoff:} persistence suppresses false alarms but delays detection of small or short leaks.
 \end{column}
 \end{columns}
 \end{SWNFrame}
 
-\begin{SWNFrame}{DETECTION AND LOCALIZATION LOGIC}
-\small
+% 1:00 -- Jan
+\begin{SWNFrame}{EVALUATION DESIGN}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.39\textwidth}
+\PaperAsset[width=\linewidth]{fig3-map.png}
+\PaperSource{Fig. 3, p. 6}
+\end{column}
+\begin{column}{0.57\textwidth}
+\textbf{L-Town benchmark}
+\DenseBullets{
+  \item 782 junctions, 905 pipes, four pressure zones, and 33 sensors.
+  \item One year of 5-minute data: 105,120 leak-free image pairs.
+  \item Two image models: 780 observation points vs. 33 sensor points.
+}
+\textbf{Evaluation sets}
+\DenseBullets{
+  \item \textbf{Controlled:} 24 isolated, step-growing leaks at eight locations and three maximum leak areas.
+  \item \textbf{More realistic:} six non-concurrent BattLeDIM leaks across one year.
+}
+\textbf{Metrics:} TPR, TNR, accuracy, detection time, and graph distance to the true leak.
+\end{column}
+\end{columns}
+\end{SWNFrame}
+
+% 1:00 -- Jan
+\begin{SWNFrame}{RESULT 1: MAGNITUDE DRIVES DETECTION}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.56\textwidth}
+\centering
+\PaperAsset[height=2.18in,keepaspectratio]{fig10-ssimo.png}
+\vspace{0.025in}
+
+\PaperAsset[height=0.62in,keepaspectratio]{fig11-local-ssim.png}
+\PaperSource{Figs. 10--11, pp. 9--11}
+\end{column}
+\begin{column}{0.40\textwidth}
+\textbf{At one example location}
+\JCBullets{
+  \item Large leak: detected almost immediately; localization converges to 4 m.
+  \item Medium leak: detected after about 16 h and only after sufficient growth.
+  \item Small leak: detected after about 21 h, near its maximum rate; localization about 96 m.
+}
+\textbf{Interpretation:} the method detects a sufficiently strong pressure-image disturbance, not the mere onset of leakage.
+\end{column}
+\end{columns}
+\end{SWNFrame}
+
+% 0:55 -- Jan
+\begin{SWNFrame}{RESULT 2: AVERAGES HIDE FAILURES}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.55\textwidth}
+\PaperAsset[width=0.50\linewidth]{fig13-tpr-tnr.png}
+\hfill
+\PaperAsset[width=0.47\linewidth]{fig15-gdrl-dt.png}
+\PaperSource{Figs. 13 and 15, pp. 10--13}
+\end{column}
+\begin{column}{0.41\textwidth}
+\textbf{Reported evidence}
+\DenseBullets{
+  \item Average accuracy: 0.91 with 780 points; 0.90 with 33 sensors.
+  \item TNR is generally high.
+  \item TPR approaches 1 for the largest leaks, but approaches 0 for the smallest.
+  \item Larger leaks are detected faster and localized more accurately.
+}
+\textbf{Our reading:} similar average accuracy does \emph{not} establish sensor-count invariance; the class balance and high TNR can mask missed small leaks.
+\end{column}
+\end{columns}
+\end{SWNFrame}
+
+% 0:50 -- Moyang
+\begin{SWNFrame}{RESULT 3: YEAR-LONG STRESS TEST}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.60\textwidth}
+\PaperAsset[height=2.70in,keepaspectratio]{fig16-realtime.png}
+\PaperSource{Fig. 16 and Table 2, pp. 12--13}
+\end{column}
+\begin{column}{0.36\textwidth}
+\textbf{Six BattLeDIM leaks}
+\DenseBullets{
+  \item Five detected; the shortest abrupt event was missed.
+  \item Detection generally occurred near peak leak rate.
+  \item Whole-year accuracy: about 70\%.
+  \item Localization error for detected leaks: 160--185 m.
+}
+\textbf{Meaning:} feasibility is shown, but early warning and field-ready localization are not. This is the strongest test because the leaks are smaller and time-varying.
+\end{column}
+\end{columns}
+\end{SWNFrame}
+
+% 0:55 -- Moyang
+\begin{SWNFrame}{CRITICAL EVALUATION}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\textbf{Supported by the experiments}
+\JCBullets{
+  \item The pipeline can detect and approximately localize sufficiently large, isolated leaks.
+  \item Inference can replace repeated online hydraulic simulations.
+  \item Sparse 33-sensor images retained similar aggregate performance in the controlled scenarios.
+}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Not yet established}
+\JCBullets{
+  \item That the GAN is better than a deterministic U-Net or residual baseline.
+  \item Robustness to sensor faults, missing data, valve/pump changes, network drift, or simultaneous leaks.
+  \item Generalization beyond one simulated network and its kriging/scaling choices.
+}
+\end{column}
+\end{columns}
+\vspace{0.04in}
+\textbf{Validity judgment:} the conclusions are credible as a proof of concept, but the authors' robustness and practical-readiness claims are broader than the presented evidence.
+\LitSource{Our evaluation, based on the experiments and assumptions reported by Rajabi et al. (2023), pp. 6--13.}
+\end{SWNFrame}
+
+% 0:45 -- Moyang
+\begin{SWNFrame}{ASSUMPTIONS THAT MATTER IN PRACTICE}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.49\textwidth}
-\textbf{Image comparison}
-\[
-SSIM(x,y)=l(x,y)c(x,y)s(x,y)
-\]
+\textbf{Model and data assumptions}
 \DenseBullets{
-  \item SSIM compares luminance, contrast, and structure.
-  \item $SSIM_o$: score over the whole pressure image for leak detection.
-  \item $SSIM_l$: local score map for leak localization.
-  \item The paper reports SSIM as a percentage-style score.
+  \item Known and sufficiently calibrated network.
+  \item No initial defects; fixed topology and pipe characteristics.
+  \item Normally distributed demand uncertainty and measurement error.
+  \item Accurate, synchronized pressure data.
+  \item No concurrent leaks in the year-long test.
 }
 \end{column}
 \begin{column}{0.47\textwidth}
-\textbf{Decision rule}
+\textbf{Consequences if violated}
 \DenseBullets{
-  \item Estimate no-leak mean and standard deviation of $SSIM_o$.
-  \item Hourly detection threshold: mean minus three standard deviations.
-  \item Alarm only after five consecutive time steps below threshold.
-  \item If alarmed, leak location is the minimum-$SSIM_l$ region.
+  \item Normal operational change may trigger false alarms.
+  \item Domain shift can corrupt the learned demand--pressure mapping.
+  \item Kriging may create spatial patterns not supported by sparse measurements.
+  \item A fixed $3\sigma$ threshold may not match utility-specific alarm costs.
 }
 \end{column}
 \end{columns}
-\vspace{0.07in}
-\textbf{Tradeoff:} conservative consecutive-step logic reduces false alarms, but it can delay detection of slow/small leaks.
+\vspace{0.05in}
+\textbf{Key distinction:} the first column is reported by the authors; the second is our interpretation of deployment risk.
+\PaperSource{limitations and future work, p. 13}
 \end{SWNFrame}
 
-\begin{SWNFrame}{CASE STUDY: L-TOWN BENCHMARK}
+% 0:50 -- Moyang
+\begin{SWNFrame}{CONCLUSION, IMPLICATIONS, AND NEXT TESTS}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.41\textwidth}
-\PaperAsset[width=\linewidth]{fig3-map.png}
-
-\JCSource
-\end{column}
-\begin{column}{0.55\textwidth}
-\small
-\textbf{Network and monitoring}
-\DenseBullets{
-  \item Benchmark WDN over 3 km x 2.6 km, with 42 km total pipe length.
-  \item 782 junctions, 2 reservoirs, 1 tank, 905 pipes, 1 pump, and 3 pressure-reducing valves.
-  \item 33 pressure sensors; measurements assumed accurate, no delay, rounded to two decimals.
-  \item One-year dataset with 5-minute time steps.
+\begin{column}{0.48\textwidth}
+\textbf{Answer to the research question}
+\JCBullets{
+  \item \textbf{Yes, conditionally:} the method detects and localizes leaks once their pressure signature is strong enough.
+  \item \textbf{No, not yet generally:} early small-leak detection and precise field localization remain weak.
 }
-\textbf{Simulation stack}
+\textbf{Practical implication}
+
+Best viewed as a screening tool that prioritizes inspection areas, not as an autonomous leak pinpointing system.
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Specific next experiments}
 \DenseBullets{
-  \item EPANET-based pressure-driven hydraulic model.
-  \item WNTR Python API used for repeated simulations and leak injection.
+  \item Compare CDCGAN against U-Net, persistence, and hydraulic-residual baselines.
+  \item Test missing/faulty sensors, topology changes, drift, and simultaneous leaks.
+  \item Validate on multiple networks and real utility measurements.
+  \item Calibrate thresholds to detection delay and false-alarm cost.
+  \item Report uncertainty for alarms and locations.
 }
 \end{column}
 \end{columns}
+\PaperSource{authors' conclusions plus our proposed evaluation priorities, p. 13}
 \end{SWNFrame}
 
-\begin{SWNFrame}{TRAINING DATA AND IMAGE CONSTRUCTION}
-\small
+% 0:30 -- all presenters
+\begin{SWNFrame}{TAKE-HOME VERDICT}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.31\textwidth}
+\textbf{Innovation}
+
+Normal hydraulic behavior is learned as an image-to-image mapping; global and local SSIM turn prediction error into detection and localization.
+\end{column}
+\begin{column}{0.31\textwidth}
+\textbf{Best evidence}
+
+Large controlled leaks are detected quickly, while the year-long BattLeDIM test detects five of six events with about 70\% accuracy.
+\end{column}
+\begin{column}{0.31\textwidth}
+\textbf{Our verdict}
+
+Promising proof of concept, but comparative baselines and field robustness tests are needed before deployment claims are justified.
+\end{column}
+\end{columns}
+\vspace{0.23in}
+\centering
+\textbf{Questions?}
+\end{SWNFrame}
+
+% BACKUP SLIDES -- open only during Q&A.
+\appendix
+
+\begin{SWNFrame}{BACKUP: WHY A GAN?}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\textbf{Potential GAN advantage}
+\JCBullets{
+  \item Adversarial training may preserve realistic spatial texture and sharper local structure.
+  \item This could make SSIM residual maps more spatially informative.
+}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{What is missing}
+\JCBullets{
+  \item No deterministic U-Net ablation.
+  \item No comparison of detection metrics, localization error, stability, or training cost.
+  \item Therefore, the incremental value of the discriminator is unknown.
+}
+\end{column}
+\end{columns}
+\vspace{0.10in}
+\textbf{Concise Q\&A answer:} the architecture is plausible, but the paper demonstrates the pipeline's performance, not the necessity of the GAN component.
+\end{SWNFrame}
+
+\begin{SWNFrame}{BACKUP: 33 VS. 780 POINTS}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.52\textwidth}
 \PaperAsset[width=\linewidth]{fig4-maps.png}
-
-\JCSource
+\PaperSource{Fig. 4, p. 7}
 \end{column}
 \begin{column}{0.44\textwidth}
-\textbf{Data generation}
+\textbf{Reported result}
 \DenseBullets{
-  \item Demand at node $i$, time $t$: normal distribution with mean equal to estimated demand and standard deviation $0.1$ times the mean.
-  \item Latin hypercube sampling creates plausible demand and pipe-parameter variation.
-  \item 365 daily demand patterns at 5-minute resolution.
-  \item 105,120 demand-pressure image pairs; 80\% training, 20\% testing.
+  \item Average controlled-scenario accuracy differs by only 0.01.
+  \item Pressure prediction MAPE is lower for the 33-point model.
 }
-\textbf{Images}
+\textbf{Why caution is needed}
 \DenseBullets{
-  \item Kriging interpolation with Gaussian variogram.
-  \item Grayscale 256 x 256 images scaled from 0 to 255.
-  \item Pressure scaled separately in four pressure zones.
+  \item Both are interpolated images, not independent spatial measurements.
+  \item Separate scaling by pressure zone changes the learning problem.
+  \item MAPE and aggregate accuracy do not test early small-leak sensitivity.
 }
+\textbf{Needed test:} repeat sensor subsets and placements; report uncertainty.
 \end{column}
 \end{columns}
 \end{SWNFrame}
 
-\begin{SWNFrame}{TRAINING AND VALIDATION}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.55\textwidth}
-\PaperAsset[width=0.88\linewidth]{fig5-mape.png}
-\vspace{0.05in}
-
-\PaperAsset[width=0.88\linewidth]{fig5-thresholds.png}
-
-\JCSource
-\end{column}
-\begin{column}{0.41\textwidth}
-\textbf{Two trained models}
-\DenseBullets{
-  \item CDCGAN780: pressure images from 780 observation points.
-  \item CDCGAN33: pressure images from the 33 sensor locations.
-  \item Both trained for 30,000 epochs.
-}
-\textbf{Hyperparameters}
-\DenseBullets{
-  \item Adam optimizer, learning rate $2 \times 10^{-4}$.
-  \item First-moment decay 0.5, batch normalization.
-  \item L1 loss weight 100.
-  \item Normal weight initialization.
-}
-\textbf{Validation}
-\DenseBullets{
-  \item Average MAPE: 1.42\% for CDCGAN780.
-  \item Average MAPE: 0.67\% for CDCGAN33.
-}
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{HYPOTHETICAL LEAK SCENARIOS}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.54\textwidth}
-\PaperAsset[width=\linewidth]{fig8-leak-step.png}
-
-\JCSource
-\end{column}
-\begin{column}{0.42\textwidth}
-\textbf{Scenario design}
-\DenseBullets{
-  \item 24 single-leak simulations.
-  \item 8 leak locations across four pressure intervals.
-  \item Three leak areas: 0.0005, 0.005, and 0.05 m$^2$.
-  \item Leak starts at midnight on day 5 and ends after 24 hours.
-  \item Leak area grows stepwise in 10 equal steps.
-}
-\textbf{Hydraulic relation}
-\[
-q_L=C_L A_L \sqrt{2gh_L}
-\]
-\DenseBullets{
-  \item $C_L=0.75$ by default.
-  \item Each scenario creates 2016 image pairs.
-}
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{WHAT A LEAK LOOKS LIKE TO SSIM}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.56\textwidth}
-\centering
-\PaperAsset[height=2.50in,keepaspectratio]{fig10-ssimo.png}
-\vspace{0.035in}
-
-\PaperAsset[height=0.82in,keepaspectratio]{fig11-local-ssim.png}
-\JCSourceTight
-\end{column}
-\begin{column}{0.40\textwidth}
-\footnotesize
-\textbf{Detection behavior at P-40}
-\CompactBullets{
-  \item Large leak, $A_L=0.05$ m$^2$: $SSIM_o$ drops below threshold immediately and returns to normal after the leak ends.
-  \item Medium leak, $A_L=0.005$ m$^2$: delayed detection; reported DT about 16 hours after the leak starts.
-  \item Small leak, $A_L=0.0005$ m$^2$: detected only near the maximum leak rate; DT about 21 hours.
-}
-\textbf{Localization behavior}
-\CompactBullets{
-  \item $SSIM_l$ forms a low-similarity zone around the leak.
-  \item The estimated location converges toward the true leak as leak magnitude grows.
-}
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{HYPOTHETICAL RESULTS: METRICS}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.52\textwidth}
-\PaperAsset[width=0.52\linewidth]{fig12-gdrl.png}
-\hfill
-\PaperAsset[width=0.46\linewidth]{fig13-tpr-tnr.png}
-
-\JCSourceTight
-\end{column}
-\begin{column}{0.44\textwidth}
-\textbf{Detection metrics}
-\[
-TPR=\frac{TP}{TP+FN},\quad
-TNR=\frac{TN}{TN+FP},\quad
-ACC=\frac{TP+TN}{TP+TN+FP+FN}
-\]
-\DenseBullets{
-  \item TPR near 1 for $A_L=0.05$ m$^2$.
-  \item TPR drops strongly as leak area decreases and approaches zero for $A_L=0.0005$ m$^2$.
-  \item TNR remains generally high.
-  \item Average ACC: 0.91 for 780 OPs and 0.90 for 33 OPs.
-}
-\textbf{Takeaway:} sensor sparsity barely reduced average accuracy in these tests.
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{LOCALIZATION RESULTS}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.56\textwidth}
-\PaperAsset[width=0.49\linewidth]{fig14-location-tpr.png}
-\hfill
-\PaperAsset[width=0.49\linewidth]{fig15-gdrl-dt.png}
-
-\JCSourceTight
-\end{column}
-\begin{column}{0.40\textwidth}
-\small
-\textbf{Location and pressure range}
-\DenseBullets{
-  \item No clear correlation between leak location or pressure range and TPR/TNR.
-  \item Result holds for both 780 and 33 observation points.
-}
-\textbf{Detection time and localization}
-\DenseBullets{
-  \item For $A_L=0.05$ m$^2$, DT is generally less than 1 hour.
-  \item For $A_L=0.005$ m$^2$, DT stays below 17 hours.
-  \item Minimum graphical distance to real leak is below 11 m for $A_L=0.05$ m$^2$.
-  \item Minimum graphical distance is below 35 m for $A_L=0.005$ m$^2$.
-}
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{REAL-TIME ONE-YEAR LEAK TEST}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.60\textwidth}
-\PaperAsset[height=3.25in,keepaspectratio]{fig16-realtime.png}
-
-\JCSource
-\end{column}
-\begin{column}{0.36\textwidth}
-\textbf{Setup}
-\DenseBullets{
-  \item Six BattLeDIM leaks in 2018.
-  \item No concurrent leaks.
-  \item Incipient and abrupt events.
-  \item Peak leak areas: 0.00024 to 0.00041 m$^2$.
-  \item Only 33 sensor locations used.
-}
-\textbf{Outcome}
-\DenseBullets{
-  \item Detected RL1 through RL5.
-  \item Missed RL6, the shortest-duration leak.
-  \item Detection generally occurred near peak leak rate.
-  \item Whole-year leak detection accuracy: about 70\%.
-  \item $GDRL_{min}$ for detected leaks: 160 to 185 m.
-}
-\end{column}
-\end{columns}
-\end{SWNFrame}
-
-\begin{SWNFrame}{WHAT THE PAPER CONTRIBUTES}
-\small
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.48\textwidth}
-\textbf{Technical contribution}
-\DenseBullets{
-  \item Recasts LD\&L as image-to-image translation plus image similarity.
-  \item Uses only normal/leak-free training data for the CDCGAN.
-  \item Employs SSIM both globally for detection and locally for localization.
-  \item Demonstrates feasibility on a realistic benchmark with sparse sensors.
-}
-\end{column}
-\begin{column}{0.48\textwidth}
-\textbf{Practical promise}
-\DenseBullets{
-  \item Fast inference compared with repeated hydraulic model simulation.
-  \item Tolerates uncertainty better than a direct residual threshold when the normal manifold is learned well.
-  \item Image representation naturally handles spatially distributed pressure information.
-  \item Similar performance with 33 OPs and 780 OPs in hypothetical scenarios is operationally attractive.
-}
-\end{column}
-\end{columns}
-\vspace{0.08in}
-\textbf{Main message:} the method is strongest when leaks are large enough to perturb pressure images before the event ends.
-\end{SWNFrame}
-
-\begin{SWNFrame}{CRITICAL DISCUSSION}
-\small
+\begin{SWNFrame}{BACKUP: INTERPRETING 70\% ACCURACY}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.49\textwidth}
-\textbf{Assumptions and limitations}
+\textbf{Why accuracy can mislead}
 \DenseBullets{
-  \item L-Town assumes a known network, no initial leaks, fixed configuration, and no time-varying pipe deterioration.
-  \item Demand uncertainty and measurement error are modeled as normal distributions.
-  \item Sensor data are assumed accurate, synchronized, and rounded only to two decimals.
-  \item Real-time events were small; detection happened close to peak leak rate.
-  \item Localization for real-time leaks remained coarse: 160 to 185 m.
+  \item A one-year time series contains many more normal than leaking time steps.
+  \item High specificity can dominate accuracy even when early leak sensitivity is poor.
+  \item Five detected events do not describe alarm frequency or event-level precision.
 }
 \end{column}
 \begin{column}{0.47\textwidth}
-\textbf{Questions for journal club}
+\textbf{Better reporting}
 \DenseBullets{
-  \item Does a GAN add value beyond a deterministic U-Net regression model?
-  \item How robust is the method to sensor faults, missing sensors, valve changes, and pump schedule changes?
-  \item Is SSIM the best anomaly score for hydraulic images, or would learned residual maps perform better?
-  \item How should thresholds be tuned for utilities with different false-alarm costs?
+  \item Event-level precision, recall, and false alarms per month.
+  \item Detection delay from onset and from economically relevant leak rate.
+  \item Precision--recall curve across thresholds.
+  \item Localization radius at fixed confidence.
 }
 \end{column}
 \end{columns}
+\vspace{0.10in}
+\textbf{Concise Q\&A answer:} 70\% supports partial feasibility, but it is insufficient by itself to establish operational usefulness.
 \end{SWNFrame}
 
-\begin{SWNFrame}{KEY TAKEAWAY}
-\small
+\begin{SWNFrame}{BACKUP: THRESHOLD AND FAILURE MODES}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.48\textwidth}
-\textbf{If you remember three things}
-\JCBullets{
-  \item The paper trains a pix2pix CDCGAN on leak-free demand-pressure image pairs, then uses mismatch to identify leaks.
-  \item Global SSIM detects leaks; local SSIM localizes likely leak regions.
-  \item Hypothetical results are strong for larger leaks, but real-time small leaks are harder: 5 of 6 detected, about 70\% accuracy.
-}
+\textbf{Decision rule}
+\[
+SSIM_o < \mu_{\mathrm{normal,hour}}-3\sigma_{\mathrm{normal,hour}}
+\]
+for five consecutive 5-minute steps.
+
+\textbf{Benefit:} fewer transient false alarms.
 \end{column}
 \begin{column}{0.48\textwidth}
-\textbf{Discussion focus}
+\textbf{Likely failure modes}
 \DenseBullets{
-  \item What evidence shows that the CDCGAN learns hydraulic normality rather than memorizing simulated patterns?
-  \item How much confidence should we place in hypothetical leak results compared with BattLeDIM real-time leaks?
-  \item Which field conditions would most likely break the SSIM thresholding logic?
-  \item What sensor placement or retraining strategy would make the approach more practical for utilities?
+  \item Short leak ends before five-step confirmation.
+  \item Slow leak is detected only near peak magnitude.
+  \item Non-stationary operations shift the normal distribution.
+  \item Correlated or heavy-tailed errors violate the $3\sigma$ intuition.
 }
 \end{column}
 \end{columns}
-\vspace{0.08in}
-\centering
-\textbf{Bottom line:} promising image-based semi-supervised LD\&L, but field robustness and thresholding remain the central open questions.
+\vspace{0.10in}
+\textbf{Improvement:} tune a cost-sensitive sequential detector on utility-specific false-alarm and delay requirements.
+\end{SWNFrame}
+
+\begin{SWNFrame}{BACKUP: CORE REFERENCES}
+\fontsize{12}{15}\selectfont
+\begin{thebibliography}{9}
+\bibitem{rajabi}
+Rajabi, M. M., Komeilian, P., Wan, X., \& Farmani, R. (2023).
+Leak detection and localization in water distribution networks using conditional
+deep convolutional generative adversarial networks.
+\emph{Water Research, 238}, 120012.
+
+\bibitem{wan}
+Wan, X., Kuhanestani, P. K., Farmani, R., \& Keedwell, E. (2022).
+Literature review of data analytics for leak detection in water distribution
+networks: a focus on pressure and flow smart sensors.
+\emph{Journal of Water Resources Planning and Management, 148}(10), 03122002.
+
+\bibitem{isola}
+Isola, P., Zhu, J.-Y., Zhou, T., \& Efros, A. A. (2017).
+Image-to-image translation with conditional adversarial networks.
+\emph{CVPR}, 1125--1134.
+
+\bibitem{vrachimis}
+Vrachimis, S. G. et al. (2022).
+Battle of the leakage detection and isolation methods.
+\emph{Journal of Water Resources Planning and Management, 148}(12), 04022068.
+\end{thebibliography}
 \end{SWNFrame}
 
 \end{document}
