@@ -135,20 +135,27 @@ pressure observations in near real time?}
 % 0:55 -- Jan
 \begin{SWNFrame}{WHAT IS A CONDITIONAL GAN?}
 \begin{columns}[T,onlytextwidth]
-\begin{column}{0.62\textwidth}
-\PaperAsset[width=\linewidth]{gan-workflow.png}
-\LitSource{Conceptual workflow based on Rajabi et al. (2023), Fig. 2, p. 5.}
+\begin{column}{0.53\textwidth}
+\PaperAsset[width=\linewidth]{fig2-architecture.png}
+\PaperSource{Fig. 2, p. 5}
 \end{column}
-\begin{column}{0.34\textwidth}
-\textbf{Conditional:} the demand image controls which pressure image is generated.
+\begin{column}{0.43\textwidth}
+\textbf{``Conditional''}
 
-\textbf{Generator:} produces the expected leak-free pressure image.
+The demand image controls which pressure image is generated.
 
-\textbf{Discriminator:} learns to distinguish real and generated pressure patches.
+\vspace{0.04in}
+\textbf{Generator vs. discriminator}
 
-\textbf{Training loop:} both networks improve competitively; L1 loss preserves pixel accuracy.
+\textbf{U-Net generator:} predicts the leak-free pressure image.
 
-\textbf{After training:} SSIM compares predicted normal pressure with the observation.
+\textbf{PatchGAN discriminator:} classifies local pressure patches as real or generated.
+
+\vspace{0.04in}
+\textbf{Training:} the discriminator learns to find fakes; the generator learns to fool it. L1 loss keeps the prediction close to the true image.
+
+\vspace{0.04in}
+\textbf{After training:} keep the generator and compare predicted normal with observed pressure using SSIM.
 \end{column}
 \end{columns}
 \end{SWNFrame}
