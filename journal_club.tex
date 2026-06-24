@@ -46,8 +46,8 @@
 % MAIN TALK: 11:30 target, leaving ~30 s safety margin.
 % Presenter balance:
 % Cemal: slides 1--4 (3:50)
-% Jan: slides 5--8 (3:50)
-% Moyang: slides 9--13 (3:50)
+% Jan: slides 5--9 (3:50)
+% Moyang: slides 10--14 (3:50)
 
 \SWNTitleSlide
   {Can a GAN Detect and Localize Leaks from Pressure Images?}
@@ -132,31 +132,59 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
-% 0:55 -- Jan
-\begin{SWNFrame}{HOW THE METHOD MAKES A DECISION}
+% 0:45 -- Jan
+\begin{SWNFrame}{WHAT ARE GAN AND CDCGAN?}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.53\textwidth}
 \PaperAsset[width=\linewidth]{fig2-architecture.png}
 \PaperSource{Fig. 2, p. 5}
 \end{column}
 \begin{column}{0.43\textwidth}
-\textbf{Prediction model}
+\textbf{GAN: two networks compete}
 \DenseBullets{
-  \item Pix2pix-style conditional GAN.
-  \item Modified U-Net generator with skip connections.
-  \item PatchGAN discriminator; adversarial + L1 loss.
+  \item \textbf{Generator:} creates a synthetic image.
+  \item \textbf{Discriminator:} decides whether an image is real or generated.
+  \item The generator improves by learning to fool the discriminator.
 }
-\textbf{Detection and localization}
+\textbf{CDCGAN: conditioned and convolutional}
 \DenseBullets{
-  \item Global $SSIM_o$: alarm when below an hourly mean $-3\sigma$ threshold for five consecutive steps.
-  \item Local $SSIM_l$: minimum-similarity region estimates the leak location.
+  \item \textbf{Conditional:} a demand image controls which pressure image is generated.
+  \item \textbf{Deep convolutional:} CNN layers learn spatial pressure patterns.
 }
-\textbf{Built-in tradeoff:} persistence suppresses false alarms but delays detection of small or short leaks.
+\textbf{Here:} demand image $\rightarrow$ expected leak-free pressure image.
 \end{column}
 \end{columns}
 \end{SWNFrame}
 
-% 1:00 -- Jan
+% 0:45 -- Jan
+\begin{SWNFrame}{HOW THE METHOD MAKES A DECISION}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\textbf{Train normal behavior}
+\JCBullets{
+  \item U-Net generator predicts leak-free pressure from demand.
+  \item PatchGAN and L1 losses make the prediction realistic and numerically close to the target.
+  \item Leak examples are not required for training.
+}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Compare prediction with observation}
+\JCBullets{
+  \item Global $SSIM_o$: alarm when below an hourly mean $-3\sigma$ threshold for five consecutive steps.
+  \item Local $SSIM_l$: minimum-similarity region estimates the leak location.
+}
+\textbf{Decision logic:}
+\[
+\text{low similarity} \Rightarrow \text{possible leak}
+\]
+\end{column}
+\end{columns}
+\vspace{0.05in}
+\textbf{Built-in tradeoff:} persistence suppresses false alarms but delays detection of small or short leaks.
+\PaperSource{methodology, pp. 4--6}
+\end{SWNFrame}
+
+% 0:50 -- Jan
 \begin{SWNFrame}{EVALUATION DESIGN}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.39\textwidth}
@@ -180,7 +208,7 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
-% 1:00 -- Jan
+% 0:50 -- Jan
 \begin{SWNFrame}{RESULT 1: MAGNITUDE DRIVES DETECTION}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.56\textwidth}
@@ -203,7 +231,7 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
-% 0:55 -- Jan
+% 0:40 -- Jan
 \begin{SWNFrame}{RESULT 2: AVERAGES HIDE FAILURES}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.55\textwidth}
