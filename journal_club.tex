@@ -133,25 +133,29 @@ pressure observations in near real time?}
 \end{SWNFrame}
 
 % 0:55 -- Jan
-\begin{SWNFrame}{HOW THE METHOD MAKES A DECISION}
+\begin{SWNFrame}{WHAT IS A CONDITIONAL GAN?}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.53\textwidth}
 \PaperAsset[width=\linewidth]{fig2-architecture.png}
 \PaperSource{Fig. 2, p. 5}
 \end{column}
 \begin{column}{0.43\textwidth}
-\textbf{Prediction model}
-\DenseBullets{
-  \item Pix2pix-style conditional GAN.
-  \item Modified U-Net generator with skip connections.
-  \item PatchGAN discriminator; adversarial + L1 loss.
-}
-\textbf{Detection and localization}
-\DenseBullets{
-  \item Global $SSIM_o$: alarm when below an hourly mean $-3\sigma$ threshold for five consecutive steps.
-  \item Local $SSIM_l$: minimum-similarity region estimates the leak location.
-}
-\textbf{Built-in tradeoff:} persistence suppresses false alarms but delays detection of small or short leaks.
+\textbf{``Conditional''}
+
+The demand image controls which pressure image is generated.
+
+\vspace{0.04in}
+\textbf{Generator vs. discriminator}
+
+\textbf{U-Net generator:} predicts the leak-free pressure image.
+
+\textbf{PatchGAN discriminator:} classifies local pressure patches as real or generated.
+
+\vspace{0.04in}
+\textbf{Training:} the discriminator learns to find fakes; the generator learns to fool it. L1 loss keeps the prediction close to the true image.
+
+\vspace{0.04in}
+\textbf{After training:} keep the generator and compare predicted normal with observed pressure using SSIM.
 \end{column}
 \end{columns}
 \end{SWNFrame}

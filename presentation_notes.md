@@ -67,11 +67,15 @@ score.
 Handover: “Jan will now explain how this pipeline turns an image mismatch into
 an alarm and how the authors tested it.”
 
-### 5. Decision logic - 0:55 - Jan
+### 5. What is a conditional GAN? - 0:55 - Jan
 
-Do not teach GAN theory in depth. Explain only what is necessary:
-U-Net predicts the normal pressure image; PatchGAN shapes the output; global
-SSIM detects; local SSIM localizes. State the delay/false-alarm tradeoff.
+Define “conditional” first: the demand image controls which pressure image is
+generated. Then explain the competition: the U-Net generator tries to create a
+realistic leak-free pressure image, while PatchGAN tries to identify generated
+local patches. The generator improves by fooling the discriminator, and L1 loss
+keeps its pixel values close to the true pressure image. End by saying that
+after training, the generator predicts normal pressure and SSIM detects and
+localizes the mismatch.
 
 ### 6. Evaluation design - 1:00 - Jan
 
