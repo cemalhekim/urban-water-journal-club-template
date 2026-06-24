@@ -132,6 +132,33 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
+% 0:45 -- Jan
+\begin{SWNFrame}{WHAT ARE GAN AND CDCGAN?}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.58\textwidth}
+\centering
+\PaperAsset[width=\linewidth]{google-gan-diagram.png}
+\LitSource{Figure: Google for Developers, ``Overview of GAN Structure,'' CC BY 4.0; definitions: Mirza and Osindero (2014).}
+\end{column}
+\begin{column}{0.38\textwidth}
+\textbf{GAN: adversarial learning}
+
+\textbf{Generator:} creates synthetic samples.
+
+\textbf{Discriminator:} separates generated samples from real data.
+
+\textbf{Competition:} its feedback trains the generator to produce more realistic outputs.
+
+\vspace{0.06in}
+\textbf{CDCGAN: the paper's extension}
+
+\textbf{Conditional:} demand controls the generated pressure image.
+
+\textbf{Deep convolutional:} CNN layers learn spatial pressure patterns.
+\end{column}
+\end{columns}
+\end{SWNFrame}
+
 % 0:55 -- Jan
 \begin{SWNFrame}{HOW THE METHOD MAKES A DECISION}
 \begin{columns}[T,onlytextwidth]
