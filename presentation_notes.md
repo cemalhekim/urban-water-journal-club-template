@@ -1,14 +1,14 @@
 # Presentation notes and timing
 
 Target duration: **11:30**, leaving roughly 30 seconds of safety against the
-12-minute limit. Slides 15-19 are backup slides and are not part of the timed
+12-minute limit. Slides 14-18 are backup slides and are not part of the timed
 talk.
 
 ## Presenter allocation
 
 - **Cemal - slides 1-4: 3:50**
-- **Jan - slides 5-9: 3:50**
-- **Moyang - slides 10-14: 3:50**
+- **Jan - slides 5-8: 3:50**
+- **Moyang - slides 9-13: 3:50**
 
 Rehearse with one shared timer. Do not explain every bullet; state the claim,
 point to the evidence, and move on.
@@ -67,23 +67,13 @@ score.
 Handover: “Jan will now explain how this pipeline turns an image mismatch into
 an alarm and how the authors tested it.”
 
-### 5. What are GAN and CDCGAN? - 0:45 - Jan
+### 5. Decision logic - 0:55 - Jan
 
-Define the terms before discussing the leak detector. A GAN has a generator
-that creates synthetic images and a discriminator that tries to identify them.
-They improve through competition. CDCGAN adds two ideas: the output is
-conditioned on a specific demand image, and convolutional layers learn spatial
-pressure patterns. End with: “Here, demand is translated into the expected
-leak-free pressure image.”
+Do not teach GAN theory in depth. Explain only what is necessary:
+U-Net predicts the normal pressure image; PatchGAN shapes the output; global
+SSIM detects; local SSIM localizes. State the delay/false-alarm tradeoff.
 
-### 6. Decision logic - 0:45 - Jan
-
-Separate training from deployment. During training, U-Net, PatchGAN, and L1
-loss learn normal demand-pressure behavior. During deployment, the generator
-predicts normal pressure; global SSIM detects and local SSIM localizes. State
-the delay/false-alarm tradeoff.
-
-### 7. Evaluation design - 0:50 - Jan
+### 6. Evaluation design - 1:00 - Jan
 
 Separate the two evidence levels:
 
@@ -92,13 +82,13 @@ Separate the two evidence levels:
 
 This distinction prepares the audience for the critical evaluation.
 
-### 8. Magnitude drives detection - 0:50 - Jan
+### 7. Magnitude drives detection - 1:00 - Jan
 
 Use the large/medium/small comparison. The key sentence is:
 “The model responds when the pressure-image disturbance becomes strong enough,
 not necessarily when the leak begins.”
 
-### 9. Averages hide failures - 0:40 - Jan
+### 8. Averages hide failures - 0:55 - Jan
 
 Do not present 0.90 accuracy as universally strong. Point out that high TNR can
 coexist with poor small-leak TPR. Make the distinction between a reported
@@ -107,31 +97,31 @@ result and your interpretation explicit.
 Handover: “Moyang will now examine the more realistic year-long test and what
 the evidence does and does not justify.”
 
-### 10. Year-long stress test - 0:50 - Moyang
+### 9. Year-long stress test - 0:50 - Moyang
 
 Lead with “five of six detected,” then qualify it: detection near peak rate,
 70% accuracy, 160-185 m localization. Conclude that this supports feasibility,
 not field readiness.
 
-### 11. Critical evaluation - 0:55 - Moyang
+### 10. Critical evaluation - 0:55 - Moyang
 
 Keep the two columns distinct. The left side is supported by evidence; the
 right side lists claims that require further experiments. The strongest
 criticism is the missing deterministic U-Net or residual baseline.
 
-### 12. Assumptions - 0:45 - Moyang
+### 11. Assumptions - 0:45 - Moyang
 
 Say explicitly: “The first column is reported by the authors; the second is our
 deployment interpretation.” Use one example: a valve change may look like a
 leak because it shifts the learned normal mapping.
 
-### 13. Conclusion and next tests - 0:50 - Moyang
+### 12. Conclusion and next tests - 0:50 - Moyang
 
 Answer the research question directly: yes for sufficiently strong isolated
 leaks; not yet for general early field detection. State the practical role as
 screening and inspection prioritization.
 
-### 14. Take-home verdict - 0:30 - All
+### 13. Take-home verdict - 0:30 - All
 
 Each presenter delivers one column in about 8 seconds. Moyang closes with:
 “Our verdict is a promising proof of concept whose practical claims now need
