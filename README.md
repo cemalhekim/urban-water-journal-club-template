@@ -1,7 +1,7 @@
 # Smart Water Networks TU Berlin Beamer Template
 
-This folder contains a LaTeX/Beamer recreation of
-`OralExam_SlidesTemplate.pptx`.
+This repository contains the reusable TU Berlin Smart Water Networks Beamer
+template and the final journal-club presentation for Rajabi et al. (2023).
 
 ## Files
 
@@ -16,6 +16,11 @@ This folder contains a LaTeX/Beamer recreation of
 - `paper-assets/`: local figure assets extracted from the supplied paper PDF
   for the journal-club presentation.
 - `main.pdf` and `journal_club.pdf`: compiled outputs.
+- `1-s2.0-S0043135423004487-main.pdf`: source paper.
+- `OralExam_SlidesTemplate.pptx`: original presentation template.
+
+Temporary extraction, rendering, comparison, and LaTeX build artifacts are
+intentionally excluded from version control.
 
 ## Build
 

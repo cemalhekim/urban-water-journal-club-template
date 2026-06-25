@@ -13,3 +13,8 @@
 preview/
 journal_preview/
 tmp/
+
+# One-off extraction, rendering, and comparison workspaces
+journal-club-work/
+latex-template-work/
+latex/
