@@ -284,39 +284,39 @@ pressure observations in near real time?}
 \end{SWNFrame}
 
 % 1:05 -- Moyang
-\begin{SWNFrame}{CRITICAL ASSESSMENT AND PRACTICAL ASSUMPTIONS}
+\begin{SWNFrame}{CRITICAL ASSESSMENT}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.48\textwidth}
 \textbf{What the evidence supports}
 \DenseBullets{
-  \item The pipeline can detect and approximately localize sufficiently large, isolated leaks.
-  \item Inference can replace repeated online hydraulic simulations.
-  \item Sparse 33-sensor images retained similar aggregate performance in the controlled scenarios.
+  \item Detection and approximate localization of large, isolated leaks.
+  \item Fast inference without online hydraulic simulation.
+  \item Similar aggregate results using only 33 sensors.
 }
 \vspace{0.04in}
-\textbf{Important assumptions}
+\textbf{Key assumptions}
 \DenseBullets{
-  \item Calibrated network with stable topology and pipe characteristics.
-  \item Accurate, synchronized pressure data and no concurrent leaks.
+  \item Calibrated, operationally stable network.
+  \item Reliable pressure data and no concurrent leaks.
 }
 \end{column}
 \begin{column}{0.48\textwidth}
-\textbf{What is not yet established}
+\textbf{What remains unproven}
 \DenseBullets{
-  \item That the GAN is better than a deterministic U-Net or residual baseline.
-  \item Robustness to sensor faults, operational changes, network drift, or simultaneous leaks.
-  \item Generalization beyond one simulated network and its kriging/scaling choices.
+  \item GAN advantage over U-Net or residual baselines.
+  \item Robustness to faults, operational changes, and network drift.
+  \item Generalization beyond one simulated network.
 }
 \vspace{0.04in}
 \textbf{Practical risk}
 \DenseBullets{
-  \item Domain shift may trigger false alarms or corrupt localization.
-  \item A fixed $3\sigma$ threshold may not reflect utility-specific alarm costs.
+  \item Domain shift may cause false alarms or localization errors.
+  \item A fixed $3\sigma$ threshold may not match utility costs.
 }
 \end{column}
 \end{columns}
-\vspace{0.025in}
-\textbf{Validity judgment:} credible as a proof of concept, but practical-readiness claims exceed the presented evidence.
+\vspace{0.015in}
+\textbf{Verdict:} credible proof of concept; deployment readiness remains unproven.
 \LitSource{Assumptions reported by Rajabi et al. (2023), pp. 6--13; deployment consequences are our interpretation.}
 \end{SWNFrame}
 

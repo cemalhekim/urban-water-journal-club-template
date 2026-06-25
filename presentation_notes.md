@@ -116,7 +116,7 @@ Lead with “five of six detected,” then qualify it: detection near peak rate,
 70% accuracy, 160-185 m localization. Conclude that this supports feasibility,
 not field readiness.
 
-### 12. Critical assessment and practical assumptions - 1:05 - Moyang
+### 12. Critical assessment - 1:05 - Moyang
 
 Contrast supported findings with untested claims, then connect the reported
 assumptions to deployment risks. The strongest criticism is the missing
