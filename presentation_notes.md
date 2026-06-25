@@ -1,14 +1,14 @@
 # Presentation notes and timing
 
 Target duration: **11:30**, leaving roughly 30 seconds of safety against the
-12-minute limit. Slides 15-19 are backup slides and are not part of the timed
+12-minute limit. Slides 14-18 are backup slides and are not part of the timed
 talk.
 
 ## Presenter allocation
 
-- **Cemal - slides 1-4: 3:50**
-- **Jan - slides 5-9: 3:50**
-- **Moyang - slides 10-14: 3:50**
+- **Cemal - slides 1-5: 3:50**
+- **Jan - slides 6-9: 3:50**
+- **Moyang - slides 10-13: 3:50**
 
 Rehearse with one shared timer. Do not explain every bullet; state the claim,
 point to the evidence, and move on.
@@ -33,13 +33,18 @@ limitation. This keeps participation balanced and answers concise.
 
 ## Slide-by-slide speaking cues
 
-### 1. Title - 0:20 - Cemal
+### 1. Title - 0:15 - Cemal
 
 Opening: “This paper asks whether normal hydraulic behavior can be learned as
 an image translation problem and whether deviations from that learned behavior
 can reveal leaks.”
 
-### 2. Research challenges - 1:00 - Cemal
+### 2. Presentation roadmap - 0:15 - Cemal
+
+Introduce the three-part structure: water problem and research objective,
+computational methodology, then results and critical assessment.
+
+### 3. Research challenges - 1:00 - Cemal
 
 State the two challenges as questions: can weak leak signals be separated from
 noise, and can detection plus localization work without labeled leaks?
@@ -49,7 +54,7 @@ authors' method.
 Transition: “The paper therefore needs a method that learns normal behavior
 without requiring a library of labeled leaks.”
 
-### 3. Paper goal and research question - 1:15 - Cemal
+### 4. Paper goal and research question - 1:10 - Cemal
 
 Read the research question once. Then state the paper's goal in plain language:
 develop accurate, robust, near-real-time leak detection and localization from
@@ -58,7 +63,7 @@ a GAN is the proposed method, not the research goal.
 
 Transition: “To pursue that goal, the authors propose a four-stage pipeline.”
 
-### 4. Core pipeline - 1:15 - Cemal
+### 5. Core pipeline - 1:10 - Cemal
 
 Follow the diagram from simulation to SSIM. Define the novelty as the
 combination of normal-data simulation, a fast surrogate, and a spatial anomaly
@@ -67,7 +72,7 @@ score.
 Handover: “Jan will now explain how this pipeline turns an image mismatch into
 an alarm and how the authors tested it.”
 
-### 5. What are GAN and CDCGAN? - 0:45 - Jan
+### 6. What are GAN and CDCGAN? - 0:50 - Jan
 
 Use the Google diagram to explain the basic competition: the generator creates
 synthetic data, the discriminator compares generated and real data, and its
@@ -75,13 +80,13 @@ feedback improves the generator. Then define the paper's extension:
 “conditional” means that the demand image controls the output, while “deep
 convolutional” means CNN layers learn spatial image patterns.
 
-### 6. Decision logic - 0:45 - Jan
+### 7. Decision logic - 0:55 - Jan
 
 Do not teach GAN theory in depth. Explain only what is necessary:
 U-Net predicts the normal pressure image; PatchGAN shapes the output; global
 SSIM detects; local SSIM localizes. State the delay/false-alarm tradeoff.
 
-### 7. Evaluation design - 0:50 - Jan
+### 8. Evaluation design - 1:00 - Jan
 
 Separate the two evidence levels:
 
@@ -90,50 +95,40 @@ Separate the two evidence levels:
 
 This distinction prepares the audience for the critical evaluation.
 
-### 8. Magnitude drives detection - 0:50 - Jan
+### 9. Magnitude drives detection - 1:05 - Jan
 
 Use the large/medium/small comparison. The key sentence is:
 “The model responds when the pressure-image disturbance becomes strong enough,
 not necessarily when the leak begins.”
 
-### 9. Averages hide failures - 0:40 - Jan
+Handover: “Moyang will now compare the aggregate results with the more
+realistic year-long test and assess what the evidence justifies.”
+
+### 10. Averages hide failures - 0:50 - Moyang
 
 Do not present 0.90 accuracy as universally strong. Point out that high TNR can
 coexist with poor small-leak TPR. Make the distinction between a reported
 result and your interpretation explicit.
 
-Handover: “Moyang will now examine the more realistic year-long test and what
-the evidence does and does not justify.”
-
-### 10. Year-long stress test - 0:50 - Moyang
+### 11. Year-long stress test - 0:55 - Moyang
 
 Lead with “five of six detected,” then qualify it: detection near peak rate,
 70% accuracy, 160-185 m localization. Conclude that this supports feasibility,
 not field readiness.
 
-### 11. Critical evaluation - 0:55 - Moyang
+### 12. Critical assessment and practical assumptions - 1:05 - Moyang
 
-Keep the two columns distinct. The left side is supported by evidence; the
-right side lists claims that require further experiments. The strongest
-criticism is the missing deterministic U-Net or residual baseline.
+Contrast supported findings with untested claims, then connect the reported
+assumptions to deployment risks. The strongest criticism is the missing
+deterministic U-Net or residual baseline. Use one example: a valve change may
+look like a leak because it shifts the learned normal mapping.
 
-### 12. Assumptions - 0:45 - Moyang
-
-Say explicitly: “The first column is reported by the authors; the second is our
-deployment interpretation.” Use one example: a valve change may look like a
-leak because it shifts the learned normal mapping.
-
-### 13. Conclusion and next tests - 0:50 - Moyang
+### 13. Conclusion, implications, and next steps - 1:00 - Moyang
 
 Answer the research question directly: yes for sufficiently strong isolated
 leaks; not yet for general early field detection. State the practical role as
-screening and inspection prioritization.
-
-### 14. Take-home verdict - 0:30 - All
-
-Each presenter delivers one column in about 8 seconds. Moyang closes with:
-“Our verdict is a promising proof of concept whose practical claims now need
-comparative baselines and field robustness tests.”
+screening and inspection prioritization, name the priority next experiments,
+and close with the take-home verdict shown on the slide.
 
 ## Q&A response pattern
 

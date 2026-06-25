@@ -45,9 +45,9 @@
 
 % MAIN TALK: 11:30 target, leaving ~30 s safety margin.
 % Presenter balance:
-% Cemal: slides 1--4 (3:50)
-% Jan: slides 5--8 (3:50)
-% Moyang: slides 9--13 (3:50)
+% Cemal: slides 1--5 (3:50)
+% Jan: slides 6--9 (3:50)
+% Moyang: slides 10--13 (3:50)
 
 \SWNTitleSlide
   {Leak detection and localization in WDNs using conditional deep convolutional GANs}
@@ -241,7 +241,7 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
-% 0:55 -- Jan
+% 0:50 -- Moyang
 \begin{SWNFrame}{RESULT 2: AVERAGES HIDE FAILURES}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.55\textwidth}
@@ -283,65 +283,49 @@ pressure observations in near real time?}
 \end{columns}
 \end{SWNFrame}
 
-% 0:55 -- Moyang
-\begin{SWNFrame}{CRITICAL EVALUATION}
+% 1:05 -- Moyang
+\begin{SWNFrame}{CRITICAL ASSESSMENT AND PRACTICAL ASSUMPTIONS}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.48\textwidth}
-\textbf{Supported by the experiments}
-\JCBullets{
+\textbf{What the evidence supports}
+\DenseBullets{
   \item The pipeline can detect and approximately localize sufficiently large, isolated leaks.
   \item Inference can replace repeated online hydraulic simulations.
   \item Sparse 33-sensor images retained similar aggregate performance in the controlled scenarios.
 }
+\vspace{0.04in}
+\textbf{Important assumptions}
+\DenseBullets{
+  \item Calibrated network with stable topology and pipe characteristics.
+  \item Accurate, synchronized pressure data and no concurrent leaks.
+}
 \end{column}
 \begin{column}{0.48\textwidth}
-\textbf{Not yet established}
-\JCBullets{
+\textbf{What is not yet established}
+\DenseBullets{
   \item That the GAN is better than a deterministic U-Net or residual baseline.
-  \item Robustness to sensor faults, missing data, valve/pump changes, network drift, or simultaneous leaks.
+  \item Robustness to sensor faults, operational changes, network drift, or simultaneous leaks.
   \item Generalization beyond one simulated network and its kriging/scaling choices.
 }
-\end{column}
-\end{columns}
 \vspace{0.04in}
-\textbf{Validity judgment:} the conclusions are credible as a proof of concept, but the authors' robustness and practical-readiness claims are broader than the presented evidence.
-\LitSource{Our evaluation, based on the experiments and assumptions reported by Rajabi et al. (2023), pp. 6--13.}
-\end{SWNFrame}
-
-% 0:45 -- Moyang
-\begin{SWNFrame}{ASSUMPTIONS THAT MATTER IN PRACTICE}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.49\textwidth}
-\textbf{Model and data assumptions}
+\textbf{Practical risk}
 \DenseBullets{
-  \item Known and sufficiently calibrated network.
-  \item No initial defects; fixed topology and pipe characteristics.
-  \item Normally distributed demand uncertainty and measurement error.
-  \item Accurate, synchronized pressure data.
-  \item No concurrent leaks in the year-long test.
-}
-\end{column}
-\begin{column}{0.47\textwidth}
-\textbf{Consequences if violated}
-\DenseBullets{
-  \item Normal operational change may trigger false alarms.
-  \item Domain shift can corrupt the learned demand--pressure mapping.
-  \item Kriging may create spatial patterns not supported by sparse measurements.
-  \item A fixed $3\sigma$ threshold may not match utility-specific alarm costs.
+  \item Domain shift may trigger false alarms or corrupt localization.
+  \item A fixed $3\sigma$ threshold may not reflect utility-specific alarm costs.
 }
 \end{column}
 \end{columns}
-\vspace{0.05in}
-\textbf{Key distinction:} the first column is reported by the authors; the second is our interpretation of deployment risk.
-\PaperSource{limitations and future work, p. 13}
+\vspace{0.025in}
+\textbf{Validity judgment:} credible as a proof of concept, but practical-readiness claims exceed the presented evidence.
+\LitSource{Assumptions reported by Rajabi et al. (2023), pp. 6--13; deployment consequences are our interpretation.}
 \end{SWNFrame}
 
-% 0:50 -- Moyang
-\begin{SWNFrame}{CONCLUSION, IMPLICATIONS, AND NEXT TESTS}
+% 1:00 -- Moyang
+\begin{SWNFrame}{CONCLUSION, IMPLICATIONS, AND NEXT STEPS}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.48\textwidth}
 \textbf{Answer to the research question}
-\JCBullets{
+\DenseBullets{
   \item \textbf{Yes, conditionally:} the method detects and localizes leaks once their pressure signature is strong enough.
   \item \textbf{No, not yet generally:} early small-leak detection and precise field localization remain weak.
 }
@@ -350,41 +334,21 @@ pressure observations in near real time?}
 Best viewed as a screening tool that prioritizes inspection areas, not as an autonomous leak pinpointing system.
 \end{column}
 \begin{column}{0.48\textwidth}
-\textbf{Specific next experiments}
+\textbf{Priority next steps}
 \DenseBullets{
-  \item Compare CDCGAN against U-Net, persistence, and hydraulic-residual baselines.
-  \item Test missing/faulty sensors, topology changes, drift, and simultaneous leaks.
-  \item Validate on multiple networks and real utility measurements.
-  \item Calibrate thresholds to detection delay and false-alarm cost.
-  \item Report uncertainty for alarms and locations.
+  \item Compare CDCGAN with U-Net and hydraulic-residual baselines.
+  \item Test sensor faults, topology changes, drift, and simultaneous leaks.
+  \item Validate across multiple networks and real utility measurements.
+  \item Calibrate thresholds to delay and false-alarm costs.
 }
 \end{column}
 \end{columns}
-\PaperSource{authors' conclusions plus our proposed evaluation priorities, p. 13}
-\end{SWNFrame}
-
-% 0:30 -- all presenters
-\begin{SWNFrame}{TAKE-HOME VERDICT}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.31\textwidth}
-\textbf{Innovation}
-
-Normal hydraulic behavior is learned as an image-to-image mapping; global and local SSIM turn prediction error into detection and localization.
-\end{column}
-\begin{column}{0.31\textwidth}
-\textbf{Best evidence}
-
-Large controlled leaks are detected quickly, while the year-long BattLeDIM test detects five of six events with about 70\% accuracy.
-\end{column}
-\begin{column}{0.31\textwidth}
-\textbf{Our verdict}
-
-Promising proof of concept, but comparative baselines and field robustness tests are needed before deployment claims are justified.
-\end{column}
-\end{columns}
-\vspace{0.23in}
+\vspace{0.08in}
+\textbf{Take-home verdict:} a promising proof of concept whose practical value now depends on comparative baselines and field robustness tests.
+\vspace{0.12in}
 \centering
 \textbf{Questions?}
+\PaperSource{authors' conclusions plus our proposed evaluation priorities, p. 13}
 \end{SWNFrame}
 
 % BACKUP SLIDES -- open only during Q&A.
