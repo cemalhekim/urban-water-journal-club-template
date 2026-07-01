@@ -7,7 +7,7 @@
 \usepackage{array}
 
 \title{Leak detection and localization in water distribution networks using conditional deep convolutional generative adversarial networks}
-\author{Cemal Hekim, Jan Lcukey, and Moyang Chen}
+\author{Cemal Hekim, Jan Luckey, and Moyang Chen}
 \institute{Rajabi, Komeilian, Wan, and Farmani - Water Research 238 (2023) 120012}
 
 \newcommand{\PaperAsset}[2][]{\includegraphics[#1]{paper-assets/#2}}
@@ -19,7 +19,7 @@
 
 \newcommand{\JCBullets}[1]{%
   \begin{itemize}
-    \setlength{\itemsep}{0.08in}
+    \setlength{\itemsep}{0.055in}
     \setlength{\parskip}{0pt}
     #1
   \end{itemize}
@@ -27,7 +27,7 @@
 
 \newcommand{\DenseBullets}[1]{%
   \begin{itemize}
-    \setlength{\itemsep}{0.025in}
+    \setlength{\itemsep}{0.045in}
     \setlength{\parskip}{0pt}
     #1
   \end{itemize}
@@ -50,8 +50,8 @@
 % Moyang: slides 10--13 (3:50)
 
 \SWNTitleSlide
-  {Leak detection and localization in WDNs using conditional deep convolutional GANs}
-  {Cemal Hekim, Jan Lcukey, and Moyang Chen}
+  {Leak detection and localization\\in WDNs using conditional deep\\convolutional GANs}
+  {Cemal Hekim, Jan Luckey, and Moyang Chen}
   {Rajabi et al., Water Research 238 (2023), 120012}
   { -- critical paper presentation}
 
@@ -79,7 +79,7 @@
 \begin{column}{0.45\textwidth}
 \textbf{Challenge 2: Can detection and localization work without labeled leaks?}
 \JCBullets{
-  \item Labeled field leaks are scarce; exhaustive leak simulation is expensive.
+  \item Labeled field leaks are scarce, exhaustive leak simulation is expensive.
   \item Existing data-driven methods struggle with scarce labels and spatial localization.
   \item Model-based methods require calibration and repeated hydraulic simulation.
 }
@@ -98,14 +98,14 @@
 \vspace{0.06in}
 
 \emph{Can a conditional deep convolutional GAN, trained only on leak-free
-demand--pressure behavior, detect and spatially localize unseen leaks from
+demand-pressure behavior, detect and spatially localize unseen leaks from
 pressure observations in near real time?}
 
 \vspace{0.12in}
 \textbf{Success would require}
 \DenseBullets{
-  \item accurate detection despite demand and measurement uncertainty;
-  \item useful spatial localization from pressure observations;
+  \item accurate detection despite demand and measurement uncertainty
+  \item useful spatial localization from pressure observations
   \item low-cost inference suitable for real-time operation.
 }
 \end{column}
@@ -223,10 +223,12 @@ pressure observations in near real time?}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.56\textwidth}
 \centering
-\PaperAsset[height=2.18in,keepaspectratio]{fig10-ssimo.png}
-\vspace{0.025in}
+\PaperAsset[height=2.05in,keepaspectratio]{fig10-ssimo.png}
 
-\PaperAsset[height=0.62in,keepaspectratio]{fig11-local-ssim.png}
+\vspace{0.07in}
+\PaperAsset[height=0.95in,keepaspectratio]{fig11-local-ssim.png}
+
+\vspace{0.05in}
 \PaperSource{Figs. 10--11, pp. 9--11}
 \end{column}
 \begin{column}{0.40\textwidth}

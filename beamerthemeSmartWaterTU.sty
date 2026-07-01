@@ -1,18 +1,31 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{beamerthemeSmartWaterTU}[2026/06/22 TU Berlin Smart Water Networks Beamer theme]
+\ProvidesPackage{beamerthemeSmartWaterTU}[2026/06/28 TU Berlin Smart Water Networks Beamer theme -- refined]
 
 \RequirePackage{tikz}
 \RequirePackage{graphicx}
 \RequirePackage{xcolor}
 \RequirePackage{iftex}
+\usetikzlibrary{calc}
 
 \mode<presentation>
 
-\definecolor{SWNRed}{HTML}{FF0000}
-\definecolor{SWNBlue}{HTML}{2D8CFF}
+% ============================================================
+%  COLOR PALETTE  (water blues + softened TU red)
+% ============================================================
+\definecolor{SWNRed}{HTML}{C8102E}      % softened TU red  -> frame titles / accent
+\definecolor{SWNRedBright}{HTML}{FF0000} % original bright red (kept available)
+\definecolor{SWNDeep}{HTML}{0B3D63}      % deep ocean blue  -> primary structure
+\definecolor{SWNBlue}{HTML}{2D8CFF}      % bright blue       -> accents / bullets
+\definecolor{SWNAqua}{HTML}{7FC4E8}      % light aqua        -> waves / sub-accents
+\definecolor{SWNInk}{HTML}{17262F}       % soft black        -> body text
+\definecolor{SWNGrey}{HTML}{6E7E8C}      % muted grey        -> captions / page no.
+\definecolor{SWNMist}{HTML}{E9F3FB}      % very light blue   -> rules / panels
 \definecolor{SWNBlack}{HTML}{000000}
 \definecolor{SWNWhite}{HTML}{FFFFFF}
 
+% ============================================================
+%  FONTS
+% ============================================================
 \ifPDFTeX
   \RequirePackage[scaled=1.0]{helvet}
   \renewcommand{\familydefault}{\sfdefault}
@@ -24,33 +37,51 @@
   \renewcommand{\familydefault}{\sfdefault}
 \fi
 
+% ============================================================
+%  BASE BEAMER SETTINGS
+% ============================================================
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}{}
 \setbeamertemplate{sidebar left}{}
 \setbeamertemplate{sidebar right}{}
-\setbeamercolor{normal text}{fg=SWNBlack,bg=SWNWhite}
-\setbeamercolor{structure}{fg=SWNRed}
-\setbeamercolor{frametitle}{fg=SWNRed,bg=SWNWhite}
-\setbeamercolor{title}{fg=SWNRed,bg=SWNWhite}
+
+\setbeamercolor{normal text}{fg=SWNInk,bg=SWNWhite}
+\setbeamercolor{structure}{fg=SWNDeep}
+\setbeamercolor{frametitle}{fg=SWNRed,bg=}
+\setbeamercolor{title}{fg=SWNDeep}
+\setbeamercolor{itemize item}{fg=SWNBlue}
+\setbeamercolor{itemize subitem}{fg=SWNAqua}
+\setbeamercolor{block title}{fg=SWNWhite,bg=SWNDeep}
+\setbeamercolor{block body}{fg=SWNInk,bg=SWNMist}
+\setbeamercolor{alertblock title}{fg=SWNWhite,bg=SWNRed}
+\setbeamercolor{alertblock body}{fg=SWNInk,bg=SWNRed!8}
+\usebeamercolor[fg]{normal text}
+
+% Body sizes kept identical to the original theme so content does NOT reflow.
 \setbeamerfont{normal text}{size=\fontsize{15}{18}\selectfont}
-\setbeamerfont{frametitle}{size=\fontsize{26}{30}\selectfont,series=\mdseries}
-\setbeamerfont{title}{size=\fontsize{28}{32}\selectfont,series=\mdseries}
+\setbeamerfont{frametitle}{size=\fontsize{22}{25}\selectfont,series=\bfseries}
+\setbeamerfont{title}{size=\fontsize{28}{32}\selectfont,series=\bfseries}
 \setbeamerfont{author}{size=\fontsize{15}{18}\selectfont,series=\bfseries}
-\setbeamerfont{institute}{size=\fontsize{15}{18}\selectfont}
+\setbeamerfont{institute}{size=\fontsize{13}{16}\selectfont}
 \setbeamerfont{footline}{size=\fontsize{9}{11}\selectfont}
 \setbeamerfont{itemize/enumerate body}{size=\fontsize{15}{18}\selectfont}
 \setbeamerfont{itemize/enumerate subbody}{size=\fontsize{15}{18}\selectfont}
 \setbeamersize{text margin left=0.48in,text margin right=0.48in}
-\setbeamertemplate{itemize item}{-}
-\setbeamertemplate{itemize subitem}{-}
-\setbeamertemplate{itemize subsubitem}{-}
+
+% Refined bullet markers (small blue square / aqua dash) -- same indentation as before.
+\setbeamertemplate{itemize item}{\raisebox{0.2ex}{\textcolor{SWNBlue}{\rule{0.40em}{0.40em}}}}
+\setbeamertemplate{itemize subitem}{\raisebox{0.28ex}{\textcolor{SWNAqua}{\rule{0.45em}{1.3pt}}}}
+\setbeamertemplate{itemize subsubitem}{\raisebox{0.28ex}{\textcolor{SWNGrey}{\rule{0.36em}{1.1pt}}}}
 \setlength{\leftmargini}{0.3125in}
 \setlength{\leftmarginii}{0.3125in}
 
+% ============================================================
+%  HELPERS / STATE
+% ============================================================
 \newcommand{\SWNAssetPath}{assets}
 \newcommand{\setswnassetpath}[1]{\renewcommand{\SWNAssetPath}{#1}}
-\newif\ifSWN@shownumber
-\SWN@shownumbertrue
+\newif\ifSWN@shownumber  \SWN@shownumbertrue
+\newif\ifSWN@showchrome  \SWN@showchrometrue
 
 \newcommand{\SWN@placeimage}[5]{%
   \node[anchor=north west,inner sep=0pt] at ([xshift=#1,yshift=-#2]current page.north west)
@@ -61,45 +92,74 @@
   \noindent\hangindent=0.3125in\hangafter=1 #1\par
 }
 
+% Nicer hanging bullet for the plain template skeleton (main.tex).
 \newcommand{\SWNBullet}[1]{%
-  \noindent\hangindent=0.3125in\hangafter=1\makebox[0.3125in][l]{-}#1\par\vspace{0.214in}
-}
+  \noindent\hangindent=0.34in\hangafter=1
+  \makebox[0.34in][l]{\raisebox{0.18ex}{\textcolor{SWNBlue}{\rule{0.42em}{0.42em}}}}#1\par\vspace{0.18in}}
 
-\newcommand{\SWNBodyBox}[2]{%
+% ============================================================
+%  SLIDE CHROME  (top rail + footer rule + logos + page number)
+% ============================================================
+\newcommand{\SWNChrome}{%
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north west,inner sep=0pt,text=SWNBlack,align=left,text width=9.054in]
-      at ([xshift=0.623in,yshift=-1.581in]current page.north west)
-      {\begin{minipage}[t][#1][t]{9.054in}\fontsize{15}{18}\selectfont #2\end{minipage}};
-  \end{tikzpicture}%
-}
-
-\newcommand{\SWNFooter}{%
-  \begin{tikzpicture}[remember picture,overlay]
-    \SWN@placeimage{0.188in}{5.117in}{0.375in}{0.436in}{\SWNAssetPath/smart-water-networks.png}
-    \SWN@placeimage{0.879in}{5.113in}{0.417in}{0.417in}{\SWNAssetPath/einstein-center.png}
-    \SWN@placeimage{1.503in}{5.113in}{0.749in}{0.417in}{\SWNAssetPath/tu-berlin-logo.png}
+    % top brand rail (deep blue with TU-red cap on the left)
+    \fill[SWNDeep] (current page.north west) rectangle ([yshift=-0.072in]current page.north east);
+    \fill[SWNRed]  (current page.north west) rectangle ([xshift=2.30in,yshift=-0.072in]current page.north west);
+    % thin separator above the footer
+    \draw[SWNMist,line width=1.0pt]
+      ([xshift=0.48in,yshift=-5.04in]current page.north west) --
+      ([xshift=-0.42in,yshift=-5.04in]current page.north east);
+    % institutional logos
+    \SWN@placeimage{0.50in}{5.13in}{0.37in}{0.43in}{\SWNAssetPath/smart-water-networks.png}
+    \SWN@placeimage{1.04in}{5.13in}{0.41in}{0.41in}{\SWNAssetPath/einstein-center.png}
+    \SWN@placeimage{1.66in}{5.13in}{0.74in}{0.41in}{\SWNAssetPath/tu-berlin-logo.png}
+    % page number
     \ifSWN@shownumber
-      \node[anchor=north east,inner sep=0pt,text=SWNBlack,font=\usebeamerfont{footline}]
-        at ([xshift=9.40in,yshift=-5.214in]current page.north west) {\insertframenumber};
+      \node[anchor=north east,inner sep=0pt,text=SWNGrey,font=\usebeamerfont{footline}]
+        at ([xshift=-0.50in,yshift=-5.17in]current page.north east) {\insertframenumber};
     \fi
   \end{tikzpicture}%
 }
 
-\setbeamertemplate{background canvas}{\color{SWNWhite}\rule{\paperwidth}{\paperheight}\SWNFooter}
-
-\setbeamertemplate{frametitle}{%
-  \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{frametitle},align=right,text width=9.02in]
-      at ([xshift=9.52in,yshift=-0.205in]current page.north west) {\insertframetitle};
-  \end{tikzpicture}%
-  \vspace*{1.055in}%
+\setbeamertemplate{background canvas}{%
+  \color{SWNWhite}\rule{\paperwidth}{\paperheight}%
+  \ifSWN@showchrome\SWNChrome\fi
 }
 
+% ============================================================
+%  FRAME TITLE  (right-aligned, softened red, two-tone accent rule)
+% ============================================================
+\setbeamertemplate{frametitle}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{frametitle},align=right,text width=9.0in]
+      at ([xshift=-0.48in,yshift=-0.40in]current page.north east) {\strut\insertframetitle};
+    % two-tone accent underline (red + short blue tick)
+    \draw[SWNRed,line width=2.4pt]
+      ([xshift=-0.48in,yshift=-0.96in]current page.north east) --
+      ([xshift=-2.48in,yshift=-0.96in]current page.north east);
+    \draw[SWNBlue,line width=2.4pt]
+      ([xshift=-2.48in,yshift=-0.96in]current page.north east) --
+      ([xshift=-3.02in,yshift=-0.96in]current page.north east);
+  \end{tikzpicture}%
+  \vspace*{0.74in}%
+}
+
+% ============================================================
+%  CONTENT FRAME ENVIRONMENTS  (unchanged public API)
+% ============================================================
 \newenvironment{SWNFrame}[1]{%
   \begin{frame}[t]{#1}
   \fontsize{15}{18}\selectfont
 }{%
   \end{frame}
+}
+
+\newcommand{\SWNBodyBox}[2]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north west,inner sep=0pt,text=SWNInk,align=left,text width=8.90in]
+      at ([xshift=0.55in,yshift=-1.20in]current page.north west)
+      {\begin{minipage}[t][#1][t]{8.90in}\fontsize{15}{18}\selectfont #2\end{minipage}};
+  \end{tikzpicture}%
 }
 
 \newcommand{\SWNTextFrame}[3]{%
@@ -113,18 +173,46 @@
   \end{frame}
 }
 
+% ============================================================
+%  TITLE SLIDE  (drop logo + elegant title + layered water waves)
+% ============================================================
 \newcommand{\SWNTitleSlide}[4]{%
   \SWN@shownumberfalse
+  \SWN@showchromefalse
   \begin{frame}[plain,t]
     \begin{tikzpicture}[remember picture,overlay]
-      \SWN@placeimage{0.670in}{0.630in}{2.423in}{2.815in}{\SWNAssetPath/smart-water-networks.png}
-      \node[anchor=north east,inner sep=0pt,text=SWNRed,font=\usebeamerfont{title},align=right,text width=6.217in]
-        at ([xshift=9.824in,yshift=-1.744in]current page.north west) {#1};
-      \node[anchor=north east,inner sep=0pt,text=SWNBlack,align=right,text width=8.803in]
-        at ([xshift=9.747in,yshift=-3.492in]current page.north west)
-        {{\usebeamerfont{author}#2}\\[0.06in]{\fontsize{15}{18}\selectfont\textbf{#3}#4}};
+      % ---- layered water waves along the bottom edge ----
+      \begin{scope}[shift={(current page.south west)},x=1in,y=1in]
+        \fill[SWNDeep]    (0,0.60) sin (2.5,0.90) cos (5,0.60) sin (7.5,0.90) cos (10,0.60) -- (10,0) -- (0,0) -- cycle;
+        \fill[SWNBlue]    (0,0.42) sin (2.5,0.68) cos (5,0.42) sin (7.5,0.68) cos (10,0.42) -- (10,0) -- (0,0) -- cycle;
+        \fill[SWNAqua]    (0,0.24) sin (2.5,0.46) cos (5,0.24) sin (7.5,0.46) cos (10,0.24) -- (10,0) -- (0,0) -- cycle;
+      \end{scope}
+      % ---- big smart-water drop ----
+      \node[anchor=north west,inner sep=0pt]
+        at ([xshift=0.70in,yshift=-0.60in]current page.north west)
+        {\includegraphics[width=2.35in]{\SWNAssetPath/smart-water-networks.png}};
+      % ---- title (no hyphenation; breaks at spaces only) ----
+      \node[anchor=north east,inner sep=0pt,text=SWNDeep,align=right,text width=6.45in]
+        at ([xshift=-0.62in,yshift=-1.25in]current page.north east) (SWNTTL)
+        {\fontsize{26}{31}\selectfont\bfseries\hyphenpenalty=10000\exhyphenpenalty=10000\relax #1};
+      % accent underline beneath title
+      \draw[SWNRed,line width=2.8pt]
+        ([xshift=0in,yshift=-0.14in]SWNTTL.south east) -- ([xshift=-2.00in,yshift=-0.14in]SWNTTL.south east);
+      \draw[SWNBlue,line width=2.8pt]
+        ([xshift=-2.00in,yshift=-0.14in]SWNTTL.south east) -- ([xshift=-2.55in,yshift=-0.14in]SWNTTL.south east);
+      % authors + source line
+      \node[anchor=north east,inner sep=0pt,align=right,text width=8.60in]
+        at ([xshift=0in,yshift=-0.44in]SWNTTL.south east)
+        {{\usebeamerfont{author}\color{SWNInk}#2}\\[0.05in]%
+         {\usebeamerfont{institute}\color{SWNGrey}\textbf{#3}#4}};
+      % institutional logos, just above the waves
+      \node[anchor=south west,inner sep=0pt] at ([xshift=0.72in,yshift=1.22in]current page.south west)
+        {\includegraphics[height=0.44in]{\SWNAssetPath/einstein-center.png}};
+      \node[anchor=south west,inner sep=0pt] at ([xshift=1.42in,yshift=1.22in]current page.south west)
+        {\includegraphics[height=0.44in]{\SWNAssetPath/tu-berlin-logo.png}};
     \end{tikzpicture}
   \end{frame}
+  \SWN@showchrometrue
   \SWN@shownumbertrue
 }
 
